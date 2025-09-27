@@ -3,9 +3,9 @@ package com.gibson.spica
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
-import com.gibson.spica.navigation.BottomNavigationBar
 import com.gibson.spica.navigation.NavigationItem
-import com.gibson.spica.navigation.SideNavigationBar
+import com.gibson.spica.navigation.NavigationLayout
+import com.gibson.spica.navigation.NavigationScaffold
 
 @Composable
 fun App() {
@@ -16,13 +16,15 @@ fun App() {
         Surface {
             when (platform.type) {
                 PlatformType.Android,
-                PlatformType.iOS -> BottomNavigationBar(
+                PlatformType.iOS -> NavigationScaffold(
+                    layout = NavigationLayout.Bottom,
                     selectedItem = selectedItem,
                     onItemSelected = { selectedItem = it }
                 )
 
                 PlatformType.Desktop,
-                PlatformType.Web -> SideNavigationBar(
+                PlatformType.Web -> NavigationScaffold(
+                    layout = NavigationLayout.Side,
                     selectedItem = selectedItem,
                     onItemSelected = { selectedItem = it }
                 )
