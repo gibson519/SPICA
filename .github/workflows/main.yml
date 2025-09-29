@@ -1,3 +1,5 @@
+
+name: ci
 package com.gibson.spica
 
 class WasmPlatform : Platform {
