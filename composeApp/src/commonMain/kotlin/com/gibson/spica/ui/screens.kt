@@ -7,25 +7,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
-@Composable fun HomeScreen() {
+@Composable
+fun HomeScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("🏠 Home Screen")
     }
 }
 
-@Composable fun MarketplaceScreen() {
+@Composable
+fun MarketplaceScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("🌍 Marketplace Screen")
     }
 }
 
-@Composable fun PortfolioScreen() {
+@Composable
+fun PortfolioScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("💼 Portfolio Screen")
     }
 }
 
-@Composable fun ProfileScreen() {
+@Composable
+fun ProfileScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("👤 Profile Screen")
     }
