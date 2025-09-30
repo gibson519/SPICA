@@ -1,10 +1,7 @@
 package com.gibson.spica.navigation
 
 import androidx.compose.runtime.Composable
-import com.gibson.spica.ui.HomeScreen
-import com.gibson.spica.ui.MarketplaceScreen
-import com.gibson.spica.ui.PortfolioScreen
-import com.gibson.spica.ui.ProfileScreen
+import com.gibson.spica.ui.*
 
 @Composable
 fun NavigationHost(selectedItem: NavigationItem) {
