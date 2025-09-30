@@ -1,22 +1,17 @@
 package com.gibson.spica.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Work
-import androidx.compose.material.icons.filled.Person
 
-sealed class NavigationItem(
-    val title: String,
+expect sealed class NavigationItem(title: String, icon: ImageVector) {
+    val title: String
     val icon: ImageVector
-) {
-    object Home : NavigationItem("Home", Icons.Filled.Home)
-    object Marketplace : NavigationItem("Marketplace", Icons.Filled.Public)
-    object Portfolio : NavigationItem("Portfolio", Icons.Filled.Work)
-    object Profile : NavigationItem("Profile", Icons.Filled.Person)
+
+    object Home : NavigationItem
+    object Marketplace : NavigationItem
+    object Portfolio : NavigationItem
+    object Profile : NavigationItem
 
     companion object {
-        val items = listOf(Home, Marketplace, Portfolio, Profile)
+        val items: List<NavigationItem>
     }
 }
