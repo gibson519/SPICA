@@ -1,4 +1,4 @@
-package com.gibson.spica.ui.navigation
+package com.gibson.spica.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
