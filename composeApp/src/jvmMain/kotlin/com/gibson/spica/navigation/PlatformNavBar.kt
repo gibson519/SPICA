@@ -1,4 +1,4 @@
-package com.gibson.spica.ui.navigation
+package com.gibson.spica.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
