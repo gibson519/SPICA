@@ -1,10 +1,10 @@
 package com.gibson.spica.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Work
+import androidx.compose.material3.icons.Icons
+import androidx.compose.material3.icons.filled.Home
+import androidx.compose.material3.icons.filled.Person
+import androidx.compose.material3.icons.filled.Public
+import androidx.compose.material3.icons.filled.Work
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class NavItem(
