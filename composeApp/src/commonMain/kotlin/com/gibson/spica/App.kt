@@ -1,12 +1,12 @@
 package com.gibson.spica
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.gibson.spica.ui.navigation.NavItem
-import com.gibson.spica.ui.navigation.PlatformNavBar
+import com.gibson.spica.navigation.NavItem
+import com.gibson.spica.navigation.PlatformNavBar
 import com.gibson.spica.ui.screens.*
 
 @Composable
