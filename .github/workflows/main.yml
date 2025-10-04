@@ -1,57 +1,44 @@
-name: Kotlin Multiplatform CI
+name: SPICA Build & Test
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
-  windows-build:
+  build:
+    name: Build & Test (KMP)
     runs-on: windows-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Cache Gradle
-        uses: actions/cache@v4
+      - name: Configure Gradle caching
+        uses: gradle/gradle-build-action@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-${{ runner.os }}
+          cache-read-only: false
 
-      # Windows doesn’t care about chmod, but it helps cross-platform
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Compile common, JVM, and JS sources
-      - name: Compile JVM/JS/Common
-        run: |
-          ./gradlew compileKotlinMetadata ^
-                   --stacktrace --warning-mode all
-        shell: cmd
+      - name: Build all KMP targets
+        run: ./gradlew build --stacktrace --info
+        shell: bash
 
-      # ✅ Assemble Android debug APK
-      - name: Assemble Debug (Android)
-        run: ./gradlew assembleDebug --stacktrace --warning-mode all
-        shell: cmd
+      - name: Assemble Android Debug APK
+        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
+        shell: bash
 
-      # ✅ Run full build
-      - name: Full build
-        run: ./gradlew build --stacktrace --warning-mode all
-        shell: cmd
-
-      # ✅ Run checks (tests, lint, etc.)
-      - name: Run checks
-        run: ./gradlew check --stacktrace --warning-mode all
-        shell: cmd
+      - name: Run Tests
+        run: ./gradlew test --stacktrace --info
+        shell: bash
