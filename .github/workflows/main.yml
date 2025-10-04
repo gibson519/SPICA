@@ -36,8 +36,6 @@ jobs:
       - name: Compile JVM/JS/Common
         run: |
           ./gradlew compileKotlinMetadata \
-                   compileKotlinJvm \
-                   compileKotlinJs \
                    --stacktrace --warning-mode all
 
       - name: Full build (Linux)
