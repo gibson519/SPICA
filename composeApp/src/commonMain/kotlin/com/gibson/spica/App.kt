@@ -13,7 +13,8 @@ import com.gibson.spica.ui.screens.*
 fun App() {
     var selectedItem by remember { mutableStateOf<NavItem>(NavItem.Home) }
 
-    val platformName = Platform().name
+    // ✅ Correct way to access platform name
+    val platformName = getPlatform().name
 
     Surface(color = Color.Black, modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
