@@ -1,6 +1,11 @@
 name: Kotlin Multiplatform CI
 
-on: [workflow_dispatch, push]
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,7 +33,6 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      # 🔍 Step 1: Compile all source sets
       - name: Compile all KMP targets
         run: |
           ./gradlew compileKotlinMetadata \
@@ -39,10 +43,8 @@ jobs:
                    compileKotlinJs \
                    --stacktrace --warning-mode all
 
-      # 🔍 Step 2: Run the full build
       - name: Full build
         run: ./gradlew build --stacktrace --warning-mode all
 
-      # 🔍 Step 3: Run all checks
       - name: Run checks
         run: ./gradlew check --stacktrace --warning-mode all
