@@ -1,8 +1,8 @@
 package com.gibson.spica.ui
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +49,7 @@ data class SpicaTab(val label: String, val icon: ImageVector)
 /**
  * Pill-shaped bottom navigation bar with a spotlight inner pill for the selected tab.
  *
- * tabs must be supplied from commonMain (or platform source sets); the code expects ImageVector icons.
+ * tabs must be supplied from platform/common sources; the code expects ImageVector icons.
  */
 @Composable
 fun SpicaBottomNavBar(
@@ -70,7 +71,7 @@ fun SpicaBottomNavBar(
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
                 .padding(horizontal = 10.dp, vertical = 10.dp)
-                .animateContentSize(animationSpec = TweenSpec(durationMillis = 220)),
+                .animateContentSize(animationSpec = tween(durationMillis = 220)),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -82,7 +83,11 @@ fun SpicaBottomNavBar(
                 } else {
                     UnselectedCircleSize
                 }
-                val animatedWidth by animateDpAsState(targetValue = targetWidth, animationSpec = TweenSpec(durationMillis = 240))
+
+                // <-- IMPORTANT: 'getValue' operator is required for 'by' here.
+                // We import androidx.compose.runtime.getValue at top; this resolves the
+                // "property delegates must have 'getValue(Nothing?, kproperty0<*>)'" error.
+                val animatedWidth by animateDpAsState(targetValue = targetWidth, animationSpec = tween(durationMillis = 240))
 
                 Box(
                     modifier = Modifier
@@ -98,7 +103,7 @@ fun SpicaBottomNavBar(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start,
                             modifier = Modifier
-                                .animateContentSize(animationSpec = TweenSpec(durationMillis = 220))
+                                .animateContentSize(animationSpec = tween(durationMillis = 220))
                         ) {
                             Box(
                                 modifier = Modifier
@@ -120,7 +125,8 @@ fun SpicaBottomNavBar(
                             Text(
                                 text = tab.label,
                                 color = SelectedTextColor,
-                                fontSize = 14.sp
+                                fontSize = 14.sp,
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     } else {
