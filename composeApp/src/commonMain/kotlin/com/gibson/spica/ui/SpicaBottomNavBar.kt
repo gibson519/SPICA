@@ -2,6 +2,7 @@ package com.gibson.spica.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,20 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val NavBarHeight = 80.dp
+private val NavBarHeight = 72.dp
 private val OuterPadding = 14.dp
-private val UnselectedCircleSize = 77.dp
-private val SelectedInnerPillHeight = 77.dp
-private val SelectedInnerPillHorizontalPadding = 18.dp
+private val InnerPadding = 10.dp
+private val InnerPillHeight = 56.dp
 
-private val NavBarBackground = Color(0xFF101012)           // true dark pill
-private val UnselectedBg = Color(0xFF1B1B1E)               // darker circles
+private val NavBarBackground = Color(0xFF101012)
+private val UnselectedBg = Color(0xFF1B1B1E)
 private val UnselectedIconTint = Color.White.copy(alpha = 0.45f)
-private val SelectedPillBg = Color(0xFF18181B)             // dark inner pill background
+private val SelectedPillBg = Color(0xFF18181B)
 private val SelectedCircleGreen = Color(0xFF2ECC71)
 private val SelectedIconTint = Color.Black
 private val SelectedTextColor = Color.White
@@ -57,42 +56,34 @@ fun SpicaBottomNavBar(
             modifier = Modifier
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
-                .padding(horizontal = 12.dp, vertical = 10.dp)
-                .animateContentSize(animationSpec = tween(200)),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .padding(horizontal = InnerPadding, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                val targetWidth: Dp = if (selected) {
-                    SelectedInnerPillHeight + SelectedInnerPillHorizontalPadding * 2 + (tab.label.length * 5.5).dp
-                } else {
-                    UnselectedCircleSize
-                }
-
-                val animatedWidth by animateDpAsState(
-                    targetValue = targetWidth,
-                    animationSpec = tween(durationMillis = 200)
+                // 🔹 Animate weight between 15f and 8f for smooth transition
+                val animatedWeight by animateFloatAsState(
+                    targetValue = if (selected) 15f else 8f,
+                    animationSpec = tween(durationMillis = 250)
                 )
 
                 Box(
                     modifier = Modifier
-                        .width(animatedWidth)
-                        .height(SelectedInnerPillHeight)
-                        .clip(RoundedCornerShape(50))
-                        .background(if (selected) SelectedPillBg else Color.Transparent)
-                        .clickable { onTabSelected(idx) }
-                        .padding(horizontal = 6.dp),
-                    contentAlignment = Alignment.Center // OK to keep center; selected Row will fill width
+                        .weight(animatedWeight)
+                        .height(InnerPillHeight)
+                        .clickable { onTabSelected(idx) },
+                    contentAlignment = Alignment.Center
                 ) {
                     if (selected) {
-                        // <-- Key change: fill the entire pill and start-align contents
+                        // Selected inner pill (anchored start)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 8.dp) // controls how far the green circle sits from the pill left edge
-                                .animateContentSize(animationSpec = tween(180)),
+                                .clip(RoundedCornerShape(50))
+                                .background(SelectedPillBg)
+                                .padding(start = 8.dp, end = 12.dp)
+                                .animateContentSize(tween(200)),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
@@ -121,9 +112,10 @@ fun SpicaBottomNavBar(
                             )
                         }
                     } else {
+                        // Unselected small circular button
                         Box(
                             modifier = Modifier
-                                .size(UnselectedCircleSize)
+                                .size(56.dp)
                                 .clip(CircleShape)
                                 .background(UnselectedBg),
                             contentAlignment = Alignment.Center
@@ -136,10 +128,6 @@ fun SpicaBottomNavBar(
                             )
                         }
                     }
-                }
-
-                if (idx != tabs.lastIndex) {
-                    Spacer(modifier = Modifier.width(6.dp))
                 }
             }
         }
