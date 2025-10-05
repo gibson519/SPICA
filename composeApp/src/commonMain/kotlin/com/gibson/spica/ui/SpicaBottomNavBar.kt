@@ -66,7 +66,6 @@ fun SpicaBottomNavBar(
                 val selected = idx == selectedIndex
 
                 val targetWidth: Dp = if (selected) {
-                    // More compact width formula
                     SelectedInnerPillHeight + SelectedInnerPillHorizontalPadding * 2 + (tab.label.length * 5.5).dp
                 } else {
                     UnselectedCircleSize
@@ -85,12 +84,17 @@ fun SpicaBottomNavBar(
                         .background(if (selected) SelectedPillBg else Color.Transparent)
                         .clickable { onTabSelected(idx) }
                         .padding(horizontal = 6.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center // OK to keep center; selected Row will fill width
                 ) {
                     if (selected) {
+                        // <-- Key change: fill the entire pill and start-align contents
                         Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 8.dp) // controls how far the green circle sits from the pill left edge
+                                .animateContentSize(animationSpec = tween(180)),
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.animateContentSize(tween(180))
+                            horizontalArrangement = Arrangement.Start
                         ) {
                             Box(
                                 modifier = Modifier
@@ -135,7 +139,7 @@ fun SpicaBottomNavBar(
                 }
 
                 if (idx != tabs.lastIndex) {
-                    Spacer(modifier = Modifier.width(3.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                 }
             }
         }
