@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.sp
 
 private val NavBarHeight = 64.dp
 private val OuterPadding = 12.dp
-private val UnselectedCircleSize = 44.dp
-private val SelectedInnerPillHeight = 40.dp
-private val SelectedInnerPillHorizontalPadding = 12.dp
+private val UnselectedCircleSize = 58.dp
+private val SelectedInnerPillHeight = 58.dp
+private val SelectedInnerPillHorizontalPadding = 24.dp
 
 private val NavBarBackground = Color(0xCC0B0B0D) // semi-transparent dark
 private val UnselectedBg = Color(0xFF6E6E73) // grey
