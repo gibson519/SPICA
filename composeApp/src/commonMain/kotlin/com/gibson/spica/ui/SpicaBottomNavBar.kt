@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val NavBarHeight = 72.dp
+private val NavBarHeight = 80.dp
 private val OuterPadding = 14.dp
-private val UnselectedCircleSize = 56.dp
-private val SelectedInnerPillHeight = 56.dp
+private val UnselectedCircleSize = 77.dp
+private val SelectedInnerPillHeight = 77.dp
 private val SelectedInnerPillHorizontalPadding = 18.dp
 
 private val NavBarBackground = Color(0xFF101012)           // true dark pill
@@ -135,7 +135,7 @@ fun SpicaBottomNavBar(
                 }
 
                 if (idx != tabs.lastIndex) {
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(3.dp))
                 }
             }
         }
