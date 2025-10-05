@@ -1,7 +1,6 @@
 package com.gibson.spica.ui
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// --- constants ---
 private val NavBarHeight = 72.dp
 private val OuterPadding = 14.dp
 private val InnerPadding = 10.dp
@@ -49,7 +49,8 @@ fun SpicaBottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(NavBarHeight)
-            .padding(horizontal = OuterPadding, vertical = 10.dp),
+            .padding(horizontal = OuterPadding, vertical = 10.dp)
+            .navigationBarsPadding(), // ✅ Prevents overlap with system nav bar
         color = Color.Transparent
     ) {
         Row(
@@ -62,7 +63,7 @@ fun SpicaBottomNavBar(
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // 🔹 Animate weight between 15f and 8f for smooth transition
+                // Animate proportional widths (15f for selected, 8f for unselected)
                 val animatedWeight by animateFloatAsState(
                     targetValue = if (selected) 15f else 8f,
                     animationSpec = tween(durationMillis = 250)
@@ -76,14 +77,14 @@ fun SpicaBottomNavBar(
                     contentAlignment = Alignment.Center
                 ) {
                     if (selected) {
-                        // Selected inner pill (anchored start)
+                        // --- Selected pill content ---
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(50))
                                 .background(SelectedPillBg)
                                 .padding(start = 8.dp, end = 12.dp)
-                                .animateContentSize(tween(200)),
+                                .animateContentSize(animationSpec = tween(200)),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
@@ -112,7 +113,7 @@ fun SpicaBottomNavBar(
                             )
                         }
                     } else {
-                        // Unselected small circular button
+                        // --- Unselected icon ---
                         Box(
                             modifier = Modifier
                                 .size(56.dp)
