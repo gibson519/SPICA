@@ -11,16 +11,19 @@ import com.gibson.spica.ui.screens.*
 
 @Composable
 fun App() {
+    // ✅ Always initialize with a default non-null NavItem
     var selectedItem by remember { mutableStateOf<NavItem>(NavItem.Home) }
 
-    // ✅ Correct way to access platform name
     val platformName = getPlatform().name
 
     Surface(color = Color.Black, modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
-            // Desktop (Java) + Web → side nav
-            if (platformName == "Java" || platformName == "Web") {
-                PlatformNavBar(selectedItem, onItemSelected = { selectedItem = it })
+
+            if (platformName.startsWith("Java") || platformName.startsWith("Web")) {
+                PlatformNavBar(
+                    selectedItem = selectedItem,
+                    onItemSelected = { selectedItem = it }
+                )
             }
 
             Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
@@ -32,9 +35,12 @@ fun App() {
                         is NavItem.Markets -> MarketsScreen()
                     }
                 }
-                // Android + iOS → bottom nav
-                if (platformName == "Android" || platformName.startsWith("iOS")) {
-                    PlatformNavBar(selectedItem, onItemSelected = { selectedItem = it })
+
+                if (platformName.startsWith("Android") || platformName.startsWith("iOS")) {
+                    PlatformNavBar(
+                        selectedItem = selectedItem,
+                        onItemSelected = { selectedItem = it }
+                    )
                 }
             }
         }
