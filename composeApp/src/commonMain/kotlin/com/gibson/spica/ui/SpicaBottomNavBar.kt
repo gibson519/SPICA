@@ -1,8 +1,5 @@
 package com.gibson.spica.ui
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,7 +22,7 @@ import androidx.compose.ui.unit.sp
 private val NavBarHeight = 130.dp
 private val OuterPadding = 5.dp
 private val InnerPadding = 5.dp
-private val InnerPillHeight = 128.dp
+private val TabHeight = 56.dp // uniform height for all tabs
 
 private val NavBarBackground = Color(0xFF101012)
 private val UnselectedBg = Color.Gray.copy(alpha = 0.45f)
@@ -49,8 +45,8 @@ fun SpicaBottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(NavBarHeight)
-            .padding(horizontal = OuterPadding, vertical = 0.dp)
-            .navigationBarsPadding(), // ✅ Prevents overlap with system nav bar
+            .padding(horizontal = OuterPadding)
+            .navigationBarsPadding(),
         color = Color.Transparent
     ) {
         Row(
@@ -63,16 +59,13 @@ fun SpicaBottomNavBar(
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // Animate proportional widths (15f for selected, 8f for unselected)
-                val animatedWeight by animateFloatAsState(
-                    targetValue = if (selected) 15f else 8f,
-                    animationSpec = tween(durationMillis = 250)
-                )
+                // Fixed proportional weights (no animation)
+                val weight = if (selected) 15f else 8f
 
                 Box(
                     modifier = Modifier
-                        .weight(animatedWeight)
-                        .height(InnerPillHeight)
+                        .weight(weight)
+                        .height(TabHeight)
                         .clickable { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -81,10 +74,10 @@ fun SpicaBottomNavBar(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(TabHeight)
                                 .clip(RoundedCornerShape(50))
                                 .background(SelectedPillBg)
-                                .padding(start = 8.dp, end = 12.dp)
-                                .animateContentSize(animationSpec = tween(200)),
+                                .padding(start = 8.dp, end = 12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
@@ -113,10 +106,10 @@ fun SpicaBottomNavBar(
                             )
                         }
                     } else {
-                        // --- Unselected icon ---
+                        // --- Unselected icon only ---
                         Box(
                             modifier = Modifier
-                                .size(56.dp)
+                                .size(TabHeight)
                                 .clip(CircleShape)
                                 .background(UnselectedBg),
                             contentAlignment = Alignment.Center
