@@ -24,14 +24,14 @@ import androidx.compose.ui.unit.sp
 
 // --- constants ---
 private val NavBarHeight = 100.dp
-private val OuterPadding = 14.dp
-private val InnerPadding = 10.dp
-private val InnerPillHeight = 70.dp
+private val OuterPadding = 5.dp
+private val InnerPadding = 0.dp
+private val InnerPillHeight = 90.dp
 
 private val NavBarBackground = Color(0xFF101012)
-private val UnselectedBg = Color(0xFF1B1B1E)
-private val UnselectedIconTint = Color.White.copy(alpha = 0.45f)
-private val SelectedPillBg = Color(0xFF18181B)
+private val UnselectedBg = Color.Gray.copy(alpha = 0.45f)
+private val UnselectedIconTint = Color.White
+private val SelectedPillBg = Color.Gray.copy(alpha = 0.45f)
 private val SelectedCircleGreen = Color(0xFF2ECC71)
 private val SelectedIconTint = Color.Black
 private val SelectedTextColor = Color.White
@@ -49,7 +49,7 @@ fun SpicaBottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(NavBarHeight)
-            .padding(horizontal = OuterPadding, vertical = 10.dp)
+            .padding(horizontal = OuterPadding, vertical = 0.dp)
             .navigationBarsPadding(), // ✅ Prevents overlap with system nav bar
         color = Color.Transparent
     ) {
@@ -57,7 +57,7 @@ fun SpicaBottomNavBar(
             modifier = Modifier
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
-                .padding(horizontal = InnerPadding, vertical = 10.dp),
+                .padding(horizontal = InnerPadding, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
