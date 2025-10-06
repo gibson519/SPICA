@@ -33,8 +33,7 @@ jobs:
         shell: bash
 
       - name: Build all KMP targets
-        run:  ./gradlew compileKotlinMetadata ^
-          --stacktrace --info
+        run:  ./gradlew build --stacktrace --info
         shell: bash
 
       - name: Assemble Android Debug APK
