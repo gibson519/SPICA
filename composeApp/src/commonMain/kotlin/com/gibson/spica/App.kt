@@ -20,9 +20,13 @@ fun App() {
         Surface(modifier = Modifier.fillMaxSize()) {
             val selectedState = remember { mutableStateOf(0) }
 
-            // Desktop & Web get side navigation; other platforms (mobile) keep bottom nav
+            // Use existing shared Platform API to decide layout.
+            val platformName = getPlatform().name.lowercase()
+            val isWeb = platformName.contains("web") || platformName.contains("kotlin/js")
+            val isDesktop = platformName.startsWith("java") || platformName.contains("jvm")
+
             when {
-                Platform.isWeb -> {
+                isWeb -> {
                     // Left side nav for web
                     Row(modifier = Modifier.fillMaxSize()) {
                         SpicaSideNav(
@@ -48,7 +52,7 @@ fun App() {
                     }
                 }
 
-                Platform.isDesktop -> {
+                isDesktop -> {
                     // Right side nav for desktop
                     Row(modifier = Modifier.fillMaxSize()) {
                         Column(
