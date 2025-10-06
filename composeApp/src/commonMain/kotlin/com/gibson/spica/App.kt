@@ -1,54 +1,124 @@
 package com.gibson.spica
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import com.gibson.spica.ui.*
 
 /**
- * Root app composable (commonMain) without using Modifier.weight to avoid internal Row/Column
- * implementation visibility issues on some MPP targets.
+ * Root composable for all platforms.
+ * Uses platform-specific navigation layouts:
+ * - Android/iOS: Bottom nav bar
+ * - Web: Left side nav
+ * - Desktop: Right side nav
  */
 @Composable
-fun App() {
+fun App(platform: String = "Android") { // pass "web" or "desktop" manually in those builds
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            val selectedState = remember { mutableStateOf(0) }
+            val selectedIndex = remember { mutableStateOf(0) }
 
-            // Use a Box so we can align the bottom nav and give the content area a bottom padding
-            // instead of relying on Modifier.weight (which can cause visibility errors in MPP).
-            Box(modifier = Modifier.fillMaxSize()) {
-                // Reserve space at the bottom for the nav by padding the content column.
-                // The value 88.dp is a conservative allowance: nav height (64) + paddings.
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 88.dp)) {
+            when (platform) {
 
-                    when (selectedState.value) {
-                        0 -> com.gibson.spica.ui.HomeScreen()
-                        1 -> com.gibson.spica.ui.PortfolioScreen()
-                        2 -> com.gibson.spica.ui.WatchlistScreen()
-                        3 -> com.gibson.spica.ui.MarketsScreen()
-                        else -> com.gibson.spica.ui.HomeScreen()
+                // --------------------------------
+                // 📱 MOBILE (Android + iOS)
+                // --------------------------------
+                "Android", "iOS" -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 88.dp) // space for bottom nav
+                        ) {
+                            when (selectedIndex.value) {
+                                0 -> HomeScreen()
+                                1 -> PortfolioScreen()
+                                2 -> WatchlistScreen()
+                                3 -> MarketsScreen()
+                            }
+                        }
+
+                        SpicaBottomNavBar(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 12.dp),
+                            tabs = DefaultSpicaTabs,
+                            selectedIndex = selectedIndex.value,
+                            onTabSelected = { selectedIndex.value = it }
+                        )
                     }
                 }
 
-                // Bottom nav aligned to the bottom center
-                SpicaBottomNavBar(
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp),
-                    tabs = DefaultSpicaTabs,
-                    selectedIndex = selectedState.value,
-                    onTabSelected = { selectedState.value = it }
-                )
+                // --------------------------------
+                // 🌐 WEB (Left side nav)
+                // --------------------------------
+                "Web" -> {
+                    Row(modifier = Modifier.fillMaxSize()) {
+                        SpicaSideNavLeft(
+                            tabs = DefaultSpicaTabs,
+                            selectedIndex = selectedIndex.value,
+                            onTabSelected = { selectedIndex.value = it }
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(24.dp)
+                        ) {
+                            when (selectedIndex.value) {
+                                0 -> HomeScreen()
+                                1 -> PortfolioScreen()
+                                2 -> WatchlistScreen()
+                                3 -> MarketsScreen()
+                            }
+                        }
+                    }
+                }
+
+                // --------------------------------
+                // 🖥️ DESKTOP (Right side nav)
+                // --------------------------------
+                "Java" -> {
+                    Row(modifier = Modifier.fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(24.dp)
+                        ) {
+                            when (selectedIndex.value) {
+                                0 -> HomeScreen()
+                                1 -> PortfolioScreen()
+                                2 -> WatchlistScreen()
+                                3 -> MarketsScreen()
+                            }
+                        }
+
+                        SpicaSideNavRight(
+                            tabs = DefaultSpicaTabs,
+                            selectedIndex = selectedIndex.value,
+                            onTabSelected = { selectedIndex.value = it }
+                        )
+                    }
+                }
+
+                else -> {
+                    // Fallback (default to mobile)
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 88.dp)
+                        ) {
+                            HomeScreen()
+                        }
+                    }
+                }
             }
         }
     }
