@@ -17,12 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 
 // --- constants ---
-private val NavBarHeight = 120.dp
+private val NavBarHeight = 130.dp
 private val OuterPadding = 5.dp
 private val InnerPadding = 5.dp
-private val TabHeight = 60.dp // uniform height for all tabs
+private val TabHeight = 56.dp // uniform height for all tabs
 
 private val NavBarBackground = Color(0xFF101012)
 private val UnselectedBg = Color.Gray.copy(alpha = 0.45f)
@@ -46,7 +50,10 @@ fun SpicaBottomNavBar(
             .fillMaxWidth()
             .height(NavBarHeight)
             .padding(horizontal = OuterPadding)
-            .navigationBarsPadding(),
+            // ✅ Fix: only apply system bottom inset (does not increase total height)
+            .windowInsetsPadding(
+                WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
+            ),
         color = Color.Transparent
     ) {
         Row(
