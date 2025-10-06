@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.windowInsetsPadding
 
 // --- constants ---
-private val NavBarHeight = 130.dp
+private val NavBarHeight = 70.dp
 private val OuterPadding = 5.dp
 private val InnerPadding = 5.dp
 private val TabHeight = 56.dp // uniform height for all tabs
