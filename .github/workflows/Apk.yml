@@ -1,0 +1,41 @@
+name: SPICA Assemble Debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  assemble:
+    name: Assemble Debug APK
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: false
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      # 🚀 Only build the Android debug APK
+      - name: Assemble Android Debug APK
+        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
+        shell: bash
+
+      # 📦 Upload APK as artifact (optional)
+      - name: Upload Debug APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SPICA-debug-apk
+          path: composeApp/build/outputs/apk/debug/*.apk
