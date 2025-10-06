@@ -27,12 +27,17 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # 🚀 Only build the Android debug APK
+      # ✅ Compile common Kotlin metadata (catches unresolved refs in commonMain)
+      - name: Compile Common Metadata
+        run: ./gradlew compileKotlinMetadata --stacktrace --info
+        shell: bash
+
+      # 🚀 Build only the Android debug APK
       - name: Assemble Android Debug APK
         run: ./gradlew :composeApp:assembleDebug --stacktrace --info
         shell: bash
 
-      # 📦 Upload APK as artifact (optional)
+      # 📦 Upload APK as artifact
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
