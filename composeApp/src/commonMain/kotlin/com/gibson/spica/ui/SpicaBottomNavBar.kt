@@ -19,11 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 // --- constants ---
-private val NavBarHeight = 90.dp
-private val OuterPadding = 12.dp
-private val InnerPadding = 10.dp
-private val TabHeight = 56.dp
-private val TabSpacing = 12.dp // ✅ consistent spacing between and at edges
+private val NavBarHeight = 120.dp
+private val OuterPadding = 5.dp
+private val InnerPadding = 5.dp
+private val TabHeight = 60.dp // uniform height for all tabs
 
 private val NavBarBackground = Color(0xFF101012)
 private val UnselectedBg = Color.Gray.copy(alpha = 0.45f)
@@ -45,27 +44,27 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .navigationBarsPadding()
             .height(NavBarHeight)
-            .padding(horizontal = OuterPadding, vertical = 6.dp),
+            .padding(horizontal = OuterPadding)
+            .navigationBarsPadding(),
         color = Color.Transparent
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
-                .padding(horizontal = InnerPadding, vertical = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(TabSpacing, Alignment.CenterHorizontally),
+                .padding(horizontal = InnerPadding, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // Each slot has equal fixed space — content differs per tab
+                // Fixed proportional weights (no animation)
+                val weight = if (selected) 15f else 8f
+
                 Box(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(weight)
                         .height(TabHeight)
                         .clickable { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
@@ -74,11 +73,11 @@ fun SpicaBottomNavBar(
                         // --- Selected pill content ---
                         Row(
                             modifier = Modifier
+                                .fillMaxWidth()
+                                .height(TabHeight)
                                 .clip(RoundedCornerShape(50))
                                 .background(SelectedPillBg)
-                                .padding(horizontal = 10.dp)
-                                .height(TabHeight)
-                                .fillMaxWidth(fraction = 0.9f), // keeps internal size smaller but centered
+                                .padding(start = 8.dp, end = 12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
@@ -107,7 +106,7 @@ fun SpicaBottomNavBar(
                             )
                         }
                     } else {
-                        // --- Unselected circular tab ---
+                        // --- Unselected icon only ---
                         Box(
                             modifier = Modifier
                                 .size(TabHeight)
