@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 // --- constants ---
-private val NavBarHeight = 100.dp
+private val NavBarHeight = 130.dp
 private val OuterPadding = 5.dp
 private val InnerPadding = 0.dp
 private val InnerPillHeight = 90.dp
