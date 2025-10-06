@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.sp
 // --- constants ---
 private val NavBarHeight = 130.dp
 private val OuterPadding = 5.dp
-private val InnerPadding = 0.dp
-private val InnerPillHeight = 90.dp
+private val InnerPadding = 5.dp
+private val InnerPillHeight = 128.dp
 
 private val NavBarBackground = Color(0xFF101012)
 private val UnselectedBg = Color.Gray.copy(alpha = 0.45f)
