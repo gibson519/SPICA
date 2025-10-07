@@ -17,10 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.windowInsetsPadding
 
 // --- constants ---
 private val NavBarHeight = 70.dp
@@ -49,11 +45,7 @@ fun SpicaBottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(NavBarHeight)
-            .padding(horizontal = OuterPadding)
-            // ✅ Fix: only apply system bottom inset (does not increase total height)
-            .windowInsetsPadding(
-                WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
-            ),
+            .padding(horizontal = OuterPadding, bottom = 8.dp), // ✅ Fixed bottom padding
         color = Color.Transparent
     ) {
         Row(
@@ -66,7 +58,7 @@ fun SpicaBottomNavBar(
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // Fixed proportional weights (no animation)
+                // Fixed proportional widths (no animation)
                 val weight = if (selected) 15f else 8f
 
                 Box(
@@ -90,7 +82,7 @@ fun SpicaBottomNavBar(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(50.dp)
+                                    .size(40.dp)
                                     .clip(CircleShape)
                                     .background(SelectedCircleGreen),
                                 contentAlignment = Alignment.Center
@@ -99,11 +91,11 @@ fun SpicaBottomNavBar(
                                     imageVector = tab.icon,
                                     contentDescription = tab.label,
                                     tint = SelectedIconTint,
-                                    modifier = Modifier.size(25.dp)
+                                    modifier = Modifier.size(22.dp)
                                 )
                             }
 
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
 
                             Text(
                                 text = tab.label,
@@ -125,7 +117,7 @@ fun SpicaBottomNavBar(
                                 imageVector = tab.icon,
                                 contentDescription = tab.label,
                                 tint = UnselectedIconTint,
-                                modifier = Modifier.size(25.dp)
+                                modifier = Modifier.size(22.dp)
                             )
                         }
                     }
