@@ -50,7 +50,6 @@ fun SpicaBottomNavBar(
             .fillMaxWidth()
             .height(NavBarHeight)
             .padding(horizontal = OuterPadding)
-            .padding(bottom = -8.dp)
             // ✅ Apply only bottom insets, not height inflation
             .windowInsetsPadding(
                 WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
