@@ -48,12 +48,11 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            // Apply the inset first so it becomes part of the composable's internal padding,
+            // then fix the height — changes to the inset won't change the outer height
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
             .height(NavBarHeight)
-            .padding(horizontal = OuterPadding)
-            // ✅ Apply only bottom insets, not height inflation
-            .windowInsetsPadding(
-                WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
-            ),
+            .padding(horizontal = OuterPadding),
         color = Color.Transparent
     ) {
         Row(
