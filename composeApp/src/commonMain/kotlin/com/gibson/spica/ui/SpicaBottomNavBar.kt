@@ -55,7 +55,8 @@ fun SpicaBottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp, bottom = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(bottom = 8.dp),
         color = Color.Transparent,
         shadowElevation = 6.dp // subtle floating effect
     ) {
