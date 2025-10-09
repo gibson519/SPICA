@@ -1,38 +1,42 @@
 package com.gibson.spica.ui
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PieChart
+import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Wallet
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- constants ---
-private val NavBarHeight = 70.dp
-private val OuterPadding = 5.dp
-private val InnerPadding = 5.dp
-private val TabHeight = 56.dp // uniform height for all tabs
-
-private val NavBarBackground = Color(0xFF101012)
-private val UnselectedBg = Color.Gray.copy(alpha = 0.45f)
-private val UnselectedIconTint = Color.White
-private val SelectedPillBg = Color.Gray.copy(alpha = 0.45f)
-private val SelectedCircleGreen = Color(0xFF2ECC71)
-private val SelectedIconTint = Color.Black
-private val SelectedTextColor = Color.White
-
+// --- Data class for a tab item ---
 data class SpicaTab(val label: String, val icon: ImageVector)
+
+// --- More accurate colors based on the design ---
+private val NavBarBackground = Color(0xFF1C1C1E)
+private val SelectedGreen = Color(0xFFAEF359)
+private val UnselectedGray = Color(0xFF333333)
+private val SelectedIconTint = Color.Black
+private val UnselectedIconTint = Color.White
+private val TextColor = Color.White
 
 @Composable
 fun SpicaBottomNavBar(
@@ -44,85 +48,114 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(NavBarHeight)
-            .padding(horizontal = OuterPadding),
+            .height(72.dp) // A bit more height for padding
+            .padding(horizontal = 16.dp, vertical = 8.dp), // Outer padding
         color = Color.Transparent
     ) {
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(50))
+                .fillMaxSize()
+                .clip(RoundedCornerShape(50)) // Pill shape
                 .background(NavBarBackground)
-                .padding(horizontal = InnerPadding, vertical = 5.dp),
+                .padding(horizontal = 8.dp), // Inner padding
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // Fixed proportional widths (no animation)
-                val weight = if (selected) 15f else 8f
+                // Animate the weight for smooth expansion/shrinking
+                val weight by animateFloatAsState(
+                    targetValue = if (selected) 3.5f else 1f,
+                    animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    )
+                )
 
+                // Animate colors for the icon and its background
+                val iconBgColor by animateColorAsState(
+                    targetValue = if (selected) SelectedGreen else UnselectedGray,
+                    animationSpec = tween(400)
+                )
+
+                val iconTintColor by animateColorAsState(
+                    targetValue = if (selected) SelectedIconTint else UnselectedIconTint,
+                    animationSpec = tween(400)
+                )
+
+                // Each item is a Box with an animated weight
                 Box(
                     modifier = Modifier
                         .weight(weight)
-                        .height(TabHeight)
-                        .clickable { onTabSelected(idx) },
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(50))
+                        .clickable(
+                            interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                            indication = null // No ripple effect
+                        ) { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
                 ) {
-                    if (selected) {
-                        // --- Selected pill content ---
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(TabHeight)
-                                .clip(RoundedCornerShape(50))
-                                .background(SelectedPillBg)
-                                .padding(start = 8.dp, end = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                                    .background(SelectedCircleGreen),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = tab.icon,
-                                    contentDescription = tab.label,
-                                    tint = SelectedIconTint,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(6.dp))
-
-                            Text(
-                                text = tab.label,
-                                color = SelectedTextColor,
-                                fontSize = 13.sp,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    } else {
-                        // --- Unselected icon only ---
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        // The icon in its circular, color-animated background
                         Box(
                             modifier = Modifier
-                                .size(TabHeight)
+                                .size(44.dp)
                                 .clip(CircleShape)
-                                .background(UnselectedBg),
+                                .background(iconBgColor),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = tab.icon,
                                 contentDescription = tab.label,
-                                tint = UnselectedIconTint,
-                                modifier = Modifier.size(22.dp)
+                                tint = iconTintColor,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+
+                        // The text label that animates in and out
+                        AnimatedVisibility(
+                            visible = selected,
+                            enter = fadeIn(animationSpec = tween(200, delayMillis = 200)) +
+                                    expandHorizontally(animationSpec = tween(400, easing = FastOutSlowInEasing)),
+                            exit = fadeOut(animationSpec = tween(200)) +
+                                   shrinkHorizontally(animationSpec = tween(400, easing = FastOutSlowInEasing))
+                        ) {
+                            Text(
+                                text = tab.label,
+                                color = TextColor,
+                                fontSize = 14.sp,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 8.dp)
                             )
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+// --- A simple preview function to test the component ---
+@Preview(showBackground = true, backgroundColor = 0xFF333333)
+@Composable
+private fun SpicaBottomNavBarPreview() {
+    val tabs = listOf(
+        SpicaTab("Home", Icons.Default.Home),
+        SpicaTab("Portfolio", Icons.Default.Wallet),
+        SpicaTab("Watchlist", Icons.Default.PieChart),
+        SpicaTab("Markets", Icons.Default.Public)
+    )
+    var selectedIndex by remember { mutableStateOf(0) }
+
+    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+        SpicaBottomNavBar(
+            tabs = tabs,
+            selectedIndex = selectedIndex,
+            onTabSelected = { selectedIndex = it }
+        )
     }
 }
