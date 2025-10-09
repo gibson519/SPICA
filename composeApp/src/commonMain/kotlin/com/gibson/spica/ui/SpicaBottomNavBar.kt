@@ -17,10 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.WindowInsets
+/*import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding*/
 
 // --- constants ---
 private val NavBarHeight = 70.dp
@@ -50,7 +50,7 @@ fun SpicaBottomNavBar(
             .fillMaxWidth()
             // Apply the inset first so it becomes part of the composable's internal padding,
             // then fix the height — changes to the inset won't change the outer height
-            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
+          //  .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
             .height(NavBarHeight)
             .padding(horizontal = OuterPadding),
         color = Color.Transparent
