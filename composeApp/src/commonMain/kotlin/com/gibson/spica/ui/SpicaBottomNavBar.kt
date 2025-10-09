@@ -139,7 +139,7 @@ fun SpicaBottomNavBar(
 }
 
 
-// --- A simple preview function to test the component ---
+/* --- A simple preview function to test the component ---
 @Preview(showBackground = true, backgroundColor = 0xFF333333)
 @Composable
 private fun SpicaBottomNavBarPreview() {
@@ -159,3 +159,4 @@ private fun SpicaBottomNavBarPreview() {
         )
     }
 }
+*/
