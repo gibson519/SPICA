@@ -1,12 +1,10 @@
 package com.gibson.spica.ui
 
 import androidx.compose.animation.*
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,10 +27,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- Data class for a tab item ---
+// --- Data class for tab item ---
 data class SpicaTab(val label: String, val icon: ImageVector)
 
-// --- More accurate colors based on the design ---
+// --- Colors matching the mockup ---
 private val NavBarBackground = Color(0xFF1C1C1E)
 private val SelectedGreen = Color(0xFFAEF359)
 private val UnselectedGray = Color(0xFF333333)
@@ -47,61 +45,67 @@ fun SpicaBottomNavBar(
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit
 ) {
+    val totalTabs = tabs.size
+    val expandedWeight = 1.5f
+    val collapsedWeight = remember(expandedWeight, totalTabs) {
+        (totalTabs.toFloat() - expandedWeight) / (totalTabs - 1)
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(72.dp) // A bit more height for padding
-            .padding(horizontal = 16.dp, vertical = 8.dp), // Outer padding
-        color = Color.Transparent
+            .height(72.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp, bottom = 8.dp),
+        color = Color.Transparent,
+        shadowElevation = 6.dp // subtle floating effect
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(50)) // Pill shape
+                .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
-                .padding(horizontal = 8.dp), // Inner padding
+                .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // Animate the weight for smooth expansion/shrinking
+                // Smooth proportional resizing animation
+                val targetWeight = if (selected) expandedWeight else collapsedWeight
                 val weight by animateFloatAsState(
-                    targetValue = if (selected) 3.5f else 1f,
-                    animationSpec = tween(
-                        durationMillis = 400,
-                        easing = FastOutSlowInEasing
-                    )
+                    targetValue = targetWeight,
+                    animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
                 )
 
-                // Animate colors for the icon and its background
+                // Animated background + icon tint
                 val iconBgColor by animateColorAsState(
                     targetValue = if (selected) SelectedGreen else UnselectedGray,
-                    animationSpec = tween(400)
+                    animationSpec = tween(300)
                 )
-
                 val iconTintColor by animateColorAsState(
                     targetValue = if (selected) SelectedIconTint else UnselectedIconTint,
-                    animationSpec = tween(400)
+                    animationSpec = tween(300)
                 )
 
-                // Each item is a Box with an animated weight
                 Box(
                     modifier = Modifier
                         .weight(weight)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(50))
                         .clickable(
-                            interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
-                            indication = null // No ripple effect
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
                         ) { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, end = 12.dp)
                     ) {
-                        // The icon in its circular, color-animated background
+                        // --- Green circle for icon ---
                         Box(
                             modifier = Modifier
                                 .size(44.dp)
@@ -117,20 +121,24 @@ fun SpicaBottomNavBar(
                             )
                         }
 
-                        // The text label that animates in and out
+                        // --- Label appears only when selected ---
                         AnimatedVisibility(
                             visible = selected,
-                            enter = fadeIn(animationSpec = tween(200, delayMillis = 200)) +
-                                    expandHorizontally(animationSpec = tween(400, easing = FastOutSlowInEasing)),
-                            exit = fadeOut(animationSpec = tween(200)) +
-                                   shrinkHorizontally(animationSpec = tween(400, easing = FastOutSlowInEasing))
+                            enter = fadeIn(animationSpec = tween(150, delayMillis = 100)) +
+                                    expandHorizontally(
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                    ),
+                            exit = fadeOut(animationSpec = tween(150)) +
+                                    shrinkHorizontally(
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                    )
                         ) {
                             Text(
                                 text = tab.label,
                                 color = TextColor,
                                 fontSize = 14.sp,
                                 style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(start = 8.dp)
+                                modifier = Modifier.padding(start = 10.dp)
                             )
                         }
                     }
@@ -139,10 +147,8 @@ fun SpicaBottomNavBar(
         }
     }
 }
-
-
-/* --- A simple preview function to test the component ---
-@Preview(showBackground = true, backgroundColor = 0xFF333333)
+/*
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun SpicaBottomNavBarPreview() {
     val tabs = listOf(
@@ -160,5 +166,4 @@ private fun SpicaBottomNavBarPreview() {
             onTabSelected = { selectedIndex = it }
         )
     }
-}
-*/
+}*/
