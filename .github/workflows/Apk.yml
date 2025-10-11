@@ -27,17 +27,23 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Compile common Kotlin metadata (catches unresolved refs in commonMain)
-      - name: Compile Common Metadata
-        run: ./gradlew compileKotlinMetadata --stacktrace --info
-        shell: bash
+      # ✅ Step 1: Compile common sources and stop immediately if it fails
+      - name: Compile Common Metadata (Unresolved Reference Check)
+        run: |
+          echo "🔍 Compiling commonMain to detect unresolved references..."
+          ./gradlew compileKotlinMetadata --stacktrace --info --warning-mode all 2>&1 | tee compile_log.txt
+          if (Select-String -Path compile_log.txt -Pattern "unresolved reference" -SimpleMatch) {
+            echo "❌ Unresolved references detected in commonMain!"
+            exit 1
+          }
+        shell: pwsh
 
-      # 🚀 Build only the Android debug APK
+      # ✅ Step 2: Assemble APK (only runs if step above passes)
       - name: Assemble Android Debug APK
-        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
+        run: ./gradlew :composeApp:assembleDebug --stacktrace --info --warning-mode all
         shell: bash
 
-      # 📦 Upload APK as artifact
+      # 📦 Step 3: Upload generated APK (optional)
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
