@@ -82,12 +82,12 @@ fun SpicaBottomNavBar(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp)
+                            .padding(start = 4.dp, end = 4.dp)
                     ) {
                         // Green circle for icon
                         Box(
                             modifier = Modifier
-                                .size(62.dp)
+                                .size(67.dp)
                                 .clip(CircleShape)
                                 .background(if (selected) SelectedGreen else UnselectedGray),
                             contentAlignment = Alignment.Center
