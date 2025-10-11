@@ -51,7 +51,7 @@ fun SpicaBottomNavBar(
         modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp),
         color = Color.Transparent,
         shadowElevation = 6.dp
     ) {
@@ -83,7 +83,7 @@ fun SpicaBottomNavBar(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 10.dp, end = 12.dp)
+                            .padding(start = 8.dp, end = 12.dp)
                     ) {
                         // Green circle for icon
                         Box(
