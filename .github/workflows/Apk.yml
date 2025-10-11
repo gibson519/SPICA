@@ -27,14 +27,28 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Step 1: Compile common sources and stop immediately if it fails
-      - name: Compile Common Metadata (Unresolved Reference Check)
+      # ✅ Step 1: Compile common sources and show errors clearly
+      - name: Compile Common Metadata (Error Highlighter)
         run: |
-          echo "🔍 Compiling commonMain to detect unresolved references..."
+          echo "🔍 Compiling commonMain to detect Kotlin errors..."
           ./gradlew compileKotlinMetadata --stacktrace --info --warning-mode all 2>&1 | tee compile_log.txt
-          if (Select-String -Path compile_log.txt -Pattern "unresolved reference" -SimpleMatch) {
-            echo "❌ Unresolved references detected in commonMain!"
+
+          # Show Kotlin errors with a few lines of context
+          $errors = Select-String -Path compile_log.txt -Pattern "e: " -Context 2,2
+          if ($errors) {
+            echo ""
+            echo "❌ Kotlin Compilation Errors Found:"
+            echo "----------------------------------"
+            $errors | ForEach-Object {
+              echo "----------------------------------"
+              $_.Context.PreContext
+              echo $_.Line
+              $_.Context.PostContext
+            }
+            echo "----------------------------------"
             exit 1
+          } else {
+            echo "✅ No Kotlin compilation errors in commonMain."
           }
         shell: pwsh
 
