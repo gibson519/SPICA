@@ -36,6 +36,21 @@ private val SelectedIconTint = Color.Black
 private val UnselectedIconTint = Color.White
 private val TextColor = Color.White
 
+// --- Sizing Constants ---
+private val NavBarHeight = 64.dp
+private val NavBarCorner = 32.dp
+private val NavBarHorizontalPadding = 10.dp
+private val UnselectedTabSize = 48.dp
+private val UnselectedIconSize = 24.dp
+private val TabSpacing = 12.dp
+private val SelectedPillHeight = 48.dp
+private val SelectedPillWidth = 120.dp
+private val SelectedPillCorner = 24.dp
+private val SelectedIconCircle = 32.dp
+private val SelectedIconSize = 24.dp
+private val SelectedIconTextGap = 8.dp
+private val SelectedTextSize = 14.sp
+
 @Composable
 fun SpicaBottomNavBar(
     modifier: Modifier = Modifier,
@@ -46,16 +61,17 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(66.dp), // Outer main pill height
+            .height(NavBarHeight)
+            .padding(horizontal = NavBarHorizontalPadding),
         color = Color.Transparent
     ) {
-        // Outer pill background (no padding)
+        // Outer nav bar pill
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(50))
+                .clip(RoundedCornerShape(NavBarCorner))
                 .background(NavBarBackground),
-            horizontalArrangement = Arrangement.SpaceBetween, // 👈 flush left/right
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
@@ -63,29 +79,29 @@ fun SpicaBottomNavBar(
 
                 Box(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(50))
+                        .clip(RoundedCornerShape(SelectedPillCorner))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
-                        ) { onTabSelected(idx) },
+                        ) { onTabSelected(idx) }
+                        .height(SelectedPillHeight),
                     contentAlignment = Alignment.Center
                 ) {
                     if (selected) {
                         // --- Selected pill ---
                         Row(
                             modifier = Modifier
-                                .fillMaxHeight()
-                                .clip(RoundedCornerShape(50))
+                                .width(SelectedPillWidth)
+                                .height(SelectedPillHeight)
+                                .clip(RoundedCornerShape(SelectedPillCorner))
                                 .background(UnselectedGray.copy(alpha = 0.45f))
-                                .padding(horizontal = 14.dp),
+                                .padding(horizontal = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(42.dp)
+                                    .size(SelectedIconCircle)
                                     .clip(CircleShape)
                                     .background(SelectedGreen),
                                 contentAlignment = Alignment.Center
@@ -94,24 +110,24 @@ fun SpicaBottomNavBar(
                                     imageVector = tab.icon,
                                     contentDescription = tab.label,
                                     tint = SelectedIconTint,
-                                    modifier = Modifier.size(22.dp)
+                                    modifier = Modifier.size(SelectedIconSize)
                                 )
                             }
 
-                            Spacer(modifier = Modifier.width(10.dp))
+                            Spacer(modifier = Modifier.width(SelectedIconTextGap))
 
                             Text(
                                 text = tab.label,
                                 color = TextColor,
-                                fontSize = 15.sp,
+                                fontSize = SelectedTextSize,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     } else {
-                        // --- Unselected tab ---
+                        // --- Unselected circular tab ---
                         Box(
                             modifier = Modifier
-                                .size(58.dp)
+                                .size(UnselectedTabSize)
                                 .clip(CircleShape)
                                 .background(UnselectedGray),
                             contentAlignment = Alignment.Center
@@ -120,7 +136,7 @@ fun SpicaBottomNavBar(
                                 imageVector = tab.icon,
                                 contentDescription = tab.label,
                                 tint = UnselectedIconTint,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(UnselectedIconSize)
                             )
                         }
                     }
@@ -130,6 +146,7 @@ fun SpicaBottomNavBar(
     }
 }
 
+// --- Preview for testing ---
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun SpicaBottomNavBarPreview() {
