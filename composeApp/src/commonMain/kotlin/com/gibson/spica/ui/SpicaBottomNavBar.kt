@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Wallet
+import androidx.compose.material.icons.filled.
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -82,12 +82,12 @@ fun SpicaBottomNavBar(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 4.dp, end = 4.dp)
+                            .padding(start = 1.dp, end = 1.dp)
                     ) {
                         // Green circle for icon
                         Box(
                             modifier = Modifier
-                                .size(67.dp)
+                                .size(69.dp)
                                 .clip(CircleShape)
                                 .background(if (selected) SelectedGreen else UnselectedGray),
                             contentAlignment = Alignment.Center
