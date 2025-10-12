@@ -58,80 +58,113 @@ fun SpicaBottomNavBar(
             .padding(horizontal = NavBarHorizontalPadding),
         color = Color.Transparent
     ) {
-        Row(
+        // ✅ Centered box that constrains width to 390.dp max (for tablet/foldable screens)
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(NavBarCorner))
-                .background(NavBarBackground),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            contentAlignment = Alignment.Center
         ) {
-            tabs.forEachIndexed { idx, tab ->
-                val selected = idx == selectedIndex
+            Row(
+                modifier = Modifier
+                    .widthIn(max = 390.dp) // ✅ Maximum width
+                    .fillMaxWidth()
+                    .height(NavBarHeight)
+                    .clip(RoundedCornerShape(NavBarCorner))
+                    .background(NavBarBackground),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                tabs.forEachIndexed { idx, tab ->
+                    val selected = idx == selectedIndex
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(SelectedPillCorner))
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) { onTabSelected(idx) }
-                        .height(SelectedPillHeight),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (selected) {
-                        Row(
-                            modifier = Modifier
-                                .width(SelectedPillWidth)
-                                .height(SelectedPillHeight)
-                                .clip(RoundedCornerShape(SelectedPillCorner))
-                                .background(UnselectedGray.copy(alpha = 0.45f))
-                                .padding(horizontal = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(SelectedPillCorner))
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { onTabSelected(idx) }
+                            .height(SelectedPillHeight),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (selected) {
+                            // --- Selected pill ---
+                            Row(
+                                modifier = Modifier
+                                    .width(SelectedPillWidth)
+                                    .height(SelectedPillHeight)
+                                    .clip(RoundedCornerShape(SelectedPillCorner))
+                                    .background(UnselectedGray.copy(alpha = 0.45f))
+                                    .padding(horizontal = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(SelectedIconCircle)
+                                        .clip(CircleShape)
+                                        .background(SelectedGreen),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = tab.icon,
+                                        contentDescription = tab.label,
+                                        tint = SelectedIconTint,
+                                        modifier = Modifier.size(SelectedIconSize)
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.width(SelectedIconTextGap))
+
+                                Text(
+                                    text = tab.label,
+                                    color = TextColor,
+                                    fontSize = SelectedTextSize,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        } else {
+                            // --- Unselected circular tab ---
                             Box(
                                 modifier = Modifier
-                                    .size(SelectedIconCircle)
+                                    .size(UnselectedTabSize)
                                     .clip(CircleShape)
-                                    .background(SelectedGreen),
+                                    .background(UnselectedGray),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = tab.icon,
                                     contentDescription = tab.label,
-                                    tint = SelectedIconTint,
-                                    modifier = Modifier.size(SelectedIconSize)
+                                    tint = UnselectedIconTint,
+                                    modifier = Modifier.size(UnselectedIconSize)
                                 )
                             }
-
-                            Spacer(modifier = Modifier.width(SelectedIconTextGap))
-
-                            Text(
-                                text = tab.label,
-                                color = TextColor,
-                                fontSize = SelectedTextSize,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .size(UnselectedTabSize)
-                                .clip(CircleShape)
-                                .background(UnselectedGray),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = tab.icon,
-                                contentDescription = tab.label,
-                                tint = UnselectedIconTint,
-                                modifier = Modifier.size(UnselectedIconSize)
-                            )
                         }
                     }
                 }
             }
         }
+    }
+}
+
+// --- Preview for testing ---
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun SpicaBottomNavBarPreview() {
+    val tabs = listOf(
+        SpicaTab("Home", Icons.Default.Home),
+        SpicaTab("Portfolio", Icons.Default.Wallet),
+        SpicaTab("Watchlist", Icons.Default.PieChart),
+        SpicaTab("Markets", Icons.Default.Public)
+    )
+    var selectedIndex by remember { mutableStateOf(0) }
+
+    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+        SpicaBottomNavBar(
+            tabs = tabs,
+            selectedIndex = selectedIndex,
+            onTabSelected = { selectedIndex = it }
+        )
     }
 }
