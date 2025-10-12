@@ -1,5 +1,11 @@
 package com.gibson.spica.navigation
 
+import com.gibson.spica.ui.AppNavBar
+import com.gibson.spica.ui.DefaultSpicaTabs
+import com.gibson.spica.ui.HomeScreen
+import com.gibson.spica.ui.PortfolioScreen
+import com.gibson.spica.ui.WatchlistScreen
+import com.gibson.spica.ui.MarketsScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
