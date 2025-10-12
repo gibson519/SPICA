@@ -27,23 +27,17 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Step 1: Compile common sources and stop immediately on any error
-      - name: Compile Common Metadata (Error Detection)
-        run: |
-          echo "🔍 Compiling commonMain to detect Kotlin errors..."
-          ./gradlew compileKotlinMetadata --stacktrace --info --warning-mode all 2>&1 | tee compile_log.txt
-          if (Select-String -Path compile_log.txt -Pattern "e: " -SimpleMatch) {
-            echo "❌ Kotlin compilation errors detected in commonMain!"
-            exit 1
-          }
-        shell: pwsh
-
-      # ✅ Step 2: Assemble APK (only runs if step above passes)
-      - name: Assemble Android Debug APK
-        run: ./gradlew :composeApp:assembleDebug --stacktrace --info --warning-mode all
+      # ✅ Compile common Kotlin metadata (catches unresolved refs in commonMain)
+      - name: Compile Common Metadata
+        run: ./gradlew compileKotlinMetadata --stacktrace --info
         shell: bash
 
-      # 📦 Step 3: Upload generated APK (optional)
+      # 🚀 Build only the Android debug APK
+      - name: Assemble Android Debug APK
+        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
+        shell: bash
+
+      # 📦 Upload APK as artifact
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
