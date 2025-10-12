@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.
+import androidx.compose.material.icons.filled.Wallet
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 data class SpicaTab(val label: String, val icon: ImageVector)
 
 // --- Colors matching the design ---
-private val NavBarBackground = Color(0xFF1C1C1E)
+private val  = Color(0xFF1C1C1E)
 private val SelectedGreen = Color(0xFFAEF359)
 private val UnselectedGray = Color(0xFF333333)
 private val SelectedIconTint = Color.Black
