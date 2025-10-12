@@ -64,7 +64,7 @@ fun SpicaBottomNavBar(
     ) {
         Surface(
             modifier = Modifier
-                .widthIn(max = 420.dp) // ✅ Limit maximum width (tablet-safe)
+                .widthIn(max = 390.dp) // ✅ Limit maximum width (tablet-safe)
                 .fillMaxWidth()
                 .height(NavBarHeight),
             color = Color.Transparent
