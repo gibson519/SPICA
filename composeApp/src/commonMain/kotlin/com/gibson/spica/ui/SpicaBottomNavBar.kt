@@ -46,17 +46,16 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(66.dp) // Outer main pill height
-            .padding(horizontal = 16.dp),
+            .height(66.dp), // Outer main pill height
         color = Color.Transparent
     ) {
-        // Outer pill background (no internal padding)
+        // Outer pill background (no padding)
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.SpaceBetween, // 👈 flush left/right
             verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
@@ -64,12 +63,13 @@ fun SpicaBottomNavBar(
 
                 Box(
                     modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
                         .clip(RoundedCornerShape(50))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
-                        ) { onTabSelected(idx) }
-                        .fillMaxHeight(), // 👈 Fills the full height of nav bar
+                        ) { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
                 ) {
                     if (selected) {
@@ -79,7 +79,7 @@ fun SpicaBottomNavBar(
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(50))
                                 .background(UnselectedGray.copy(alpha = 0.45f))
-                                .padding(horizontal = 14.dp), // only horizontal padding now
+                                .padding(horizontal = 14.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
