@@ -1,11 +1,14 @@
 package com.gibson.spica.ui
 
+import androidx.compose.runtime.Composable
+
 /**
- * Multiplatform navigation bar entry.
- * - Android/iOS → bottom nav
- * - Desktop/Web → side nav
+ * Platform-specific navigation bar (expect/actual).
+ * - Android/iOS → Bottom Nav Bar
+ * - Desktop/Web → Side Nav Bar
  */
+@Composable
 expect fun AppNavBar(
-    currentRoute: String?,
-    onItemClick: (route: String) -> Unit
+    selectedIndex: Int,
+    onTabSelected: (Int) -> Unit
 )
