@@ -25,10 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// --- Data class for tab item ---
 data class SpicaTab(val label: String, val icon: ImageVector)
 
+// --- Colors ---
 private val NavBarBackground = Color(0xFF1C1C1E)
-private val InnerPillGray = Color(0xFF333333)
 private val SelectedGreen = Color(0xFFAEF359)
 private val UnselectedGray = Color(0xFF333333)
 private val SelectedIconTint = Color.Black
@@ -45,75 +46,83 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(72.dp)
+            .height(66.dp) // 👈 main nav bar height (tight)
             .padding(horizontal = 16.dp),
         color = Color.Transparent
     ) {
+        // Outer pill background
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
-                .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly // ✅ keeps equal gaps at start, between, and end
+                .padding(horizontal = 10.dp, vertical = 4.dp), // 👈 small vertical space around tabs
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
 
-                // fixed equal height, equal width for every tab
                 Box(
                     modifier = Modifier
-                        .height(56.dp)
-                        .width(80.dp) // ✅ equal tab width
                         .clip(RoundedCornerShape(50))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
-                        ) { onTabSelected(idx) },
+                        ) { onTabSelected(idx) }
+                        .height(58.dp) // 👈 inner pill/tab height — almost fills parent
+                        .padding(horizontal = 0.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     if (selected) {
-                        // --- Inner pill background for selected ---
-                        Box(
+                        // --- Selected pill ---
+                        Row(
                             modifier = Modifier
-                                .matchParentSize()
+                                .fillMaxHeight()
                                 .clip(RoundedCornerShape(50))
-                                .background(InnerPillGray)
-                        )
-                    }
+                                .background(UnselectedGray.copy(alpha = 0.45f))
+                                .padding(horizontal = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(42.dp)
+                                    .clip(CircleShape)
+                                    .background(SelectedGreen),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = tab.icon,
+                                    contentDescription = tab.label,
+                                    tint = SelectedIconTint,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 6.dp)
-                    ) {
-                        // Green circle for icon
+                            Spacer(modifier = Modifier.width(10.dp))
+
+                            Text(
+                                text = tab.label,
+                                color = TextColor,
+                                fontSize = 15.sp,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    } else {
+                        // --- Unselected circle ---
                         Box(
                             modifier = Modifier
-                                .size(44.dp)
+                                .size(58.dp)
                                 .clip(CircleShape)
-                                .background(if (selected) SelectedGreen else UnselectedGray),
+                                .background(UnselectedGray),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = tab.icon,
                                 contentDescription = tab.label,
-                                tint = if (selected) SelectedIconTint else UnselectedIconTint,
+                                tint = UnselectedIconTint,
                                 modifier = Modifier.size(24.dp)
-                            )
-                        }
-
-                        // Text label (only when selected)
-                        if (selected) {
-                            Text(
-                                text = tab.label,
-                                color = TextColor,
-                                fontSize = 14.sp,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(start = 8.dp)
                             )
                         }
                     }
