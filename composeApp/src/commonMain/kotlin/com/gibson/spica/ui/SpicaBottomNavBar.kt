@@ -56,7 +56,7 @@ fun SpicaBottomNavBar(
                 .fillMaxSize()
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
-                .padding(horizontal = 10.dp, vertical = 4.dp), // 👈 small vertical space around tabs
+              //  .padding(horizontal = 10.dp, vertical = 4.dp), 👈 small vertical space around tabs
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
