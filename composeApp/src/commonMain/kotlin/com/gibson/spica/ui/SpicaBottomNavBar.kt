@@ -37,15 +37,15 @@ private val UnselectedIconTint = Color.White
 private val TextColor = Color.White
 
 // --- Sizing Constants ---
-private val NavBarHeight = 64.dp
+private val NavBarHeight = 72.dp
 private val NavBarCorner = 32.dp
-private val NavBarHorizontalPadding = 10.dp
-private val UnselectedTabSize = 48.dp
+private val NavBarHorizontalPadding = 5.dp
+private val UnselectedTabSize = 68.dp
 private val UnselectedIconSize = 24.dp
 private val TabSpacing = 12.dp
 private val SelectedPillHeight = 48.dp
 private val SelectedPillWidth = 120.dp
-private val SelectedPillCorner = 24.dp
+private val SelectedPillCorner = 30.dp
 private val SelectedIconCircle = 32.dp
 private val SelectedIconSize = 24.dp
 private val SelectedIconTextGap = 8.dp
