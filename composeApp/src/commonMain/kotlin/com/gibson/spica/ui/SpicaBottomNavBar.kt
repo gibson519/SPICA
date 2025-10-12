@@ -25,10 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- Data class for tab item ---
 data class SpicaTab(val label: String, val icon: ImageVector)
 
-// --- Colors matching the design ---
 private val NavBarBackground = Color(0xFF1C1C1E)
 private val InnerPillGray = Color(0xFF333333)
 private val SelectedGreen = Color(0xFFAEF359)
@@ -44,10 +42,6 @@ fun SpicaBottomNavBar(
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit
 ) {
-    val totalTabs = tabs.size
-    val expandedWeight = 1.5f
-    val collapsedWeight = (totalTabs.toFloat() - expandedWeight) / (totalTabs - 1)
-
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -61,16 +55,17 @@ fun SpicaBottomNavBar(
                 .clip(RoundedCornerShape(50))
                 .background(NavBarBackground)
                 .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly // ✅ keeps equal gaps at start, between, and end
         ) {
             tabs.forEachIndexed { idx, tab ->
                 val selected = idx == selectedIndex
-                val weight = if (selected) expandedWeight else collapsedWeight
 
+                // fixed equal height, equal width for every tab
                 Box(
                     modifier = Modifier
-                        .weight(weight)
-                        .fillMaxHeight()
+                        .height(56.dp)
+                        .width(80.dp) // ✅ equal tab width
                         .clip(RoundedCornerShape(50))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -78,8 +73,8 @@ fun SpicaBottomNavBar(
                         ) { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
                 ) {
-                    // --- Inner pill only for selected tab ---
                     if (selected) {
+                        // --- Inner pill background for selected ---
                         Box(
                             modifier = Modifier
                                 .matchParentSize()
@@ -93,7 +88,7 @@ fun SpicaBottomNavBar(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 6.dp, end = 12.dp)
+                            .padding(horizontal = 6.dp)
                     ) {
                         // Green circle for icon
                         Box(
@@ -118,7 +113,7 @@ fun SpicaBottomNavBar(
                                 color = TextColor,
                                 fontSize = 14.sp,
                                 style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(start = 10.dp)
+                                modifier = Modifier.padding(start = 8.dp)
                             )
                         }
                     }
