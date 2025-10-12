@@ -1,11 +1,11 @@
-name: SPICA Assemble Debug
+name: SPICA Assemble Debug (Fast Cache Build)
 
 on:
   workflow_dispatch:
 
 jobs:
   assemble:
-    name: Assemble Debug APK
+    name: Assemble Debug APK (With Build Cache)
     runs-on: windows-latest
 
     steps:
@@ -18,6 +18,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # 🧱 Cache Gradle wrapper, config, and build caches
+      - name: Cache Gradle files + Build Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            **/.gradle/build-cache
+            composeApp/build
+            shared/build
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-${{ hashFiles('gradle.properties', '**/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -27,13 +41,13 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Compile commonMain sources first
+      # ✅ Compile commonMain sources for early Kotlin errors
       - name: Compile Kotlin Metadata (Error Extractor)
         id: compile_metadata
         shell: bash
         run: |
           echo "🔍 Compiling commonMain sources to detect Kotlin errors..."
-          ./gradlew compileKotlinMetadata --stacktrace --info | tee build_log.txt
+          ./gradlew compileKotlinMetadata --build-cache --stacktrace --info | tee build_log.txt
 
           echo ""
           echo "----------------------------------------"
@@ -41,13 +55,13 @@ jobs:
           echo "----------------------------------------"
           grep -E "^e: " build_log.txt || echo "✅ No Kotlin compilation errors found in commonMain."
 
-      # 🚀 Assemble Android Debug APK (Android module)
+      # 🚀 Assemble Android Debug APK
       - name: Assemble Android Debug APK (Error Extractor)
         id: assemble_debug
         shell: bash
         run: |
           echo "🚀 Building Android Debug APK..."
-          ./gradlew :composeApp:assembleDebug --stacktrace --info | tee android_build_log.txt
+          ./gradlew :composeApp:assembleDebug --build-cache --stacktrace --info | tee android_build_log.txt
 
           echo ""
           echo "----------------------------------------"
@@ -55,7 +69,7 @@ jobs:
           echo "----------------------------------------"
           grep -E "^e: " android_build_log.txt || echo "✅ No Kotlin compilation errors found in Android module."
 
-      # 📦 Upload APK as artifact (only if build succeeded)
+      # 📦 Upload APK if successful
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
