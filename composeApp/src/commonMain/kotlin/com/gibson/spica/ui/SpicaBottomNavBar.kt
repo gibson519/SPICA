@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 data class SpicaTab(val label: String, val icon: ImageVector)
 
 // --- Colors matching the design ---
-private val  = Color(0xFF1C1C1E)
+private val NavBarBackground = Color(0xFF1C1C1E)
 private val SelectedGreen = Color(0xFFAEF359)
 private val UnselectedGray = Color(0xFF333333)
 private val SelectedIconTint = Color.Black
