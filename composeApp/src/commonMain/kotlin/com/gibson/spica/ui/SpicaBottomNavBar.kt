@@ -30,6 +30,7 @@ data class SpicaTab(val label: String, val icon: ImageVector)
 
 // --- Colors matching the design ---
 private val NavBarBackground = Color(0xFF1C1C1E)
+private val InnerPillGray = Color(0xFF333333)
 private val SelectedGreen = Color(0xFFAEF359)
 private val UnselectedGray = Color(0xFF333333)
 private val SelectedIconTint = Color.Black
@@ -77,17 +78,27 @@ fun SpicaBottomNavBar(
                         ) { onTabSelected(idx) },
                     contentAlignment = Alignment.Center
                 ) {
+                    // --- Inner pill only for selected tab ---
+                    if (selected) {
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clip(RoundedCornerShape(50))
+                                .background(InnerPillGray)
+                        )
+                    }
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 1.dp, end = 1.dp)
+                            .padding(start = 6.dp, end = 12.dp)
                     ) {
                         // Green circle for icon
                         Box(
                             modifier = Modifier
-                                .size(69.dp)
+                                .size(44.dp)
                                 .clip(CircleShape)
                                 .background(if (selected) SelectedGreen else UnselectedGray),
                             contentAlignment = Alignment.Center
