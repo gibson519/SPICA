@@ -46,17 +46,16 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(66.dp) // 👈 main nav bar height (tight)
+            .height(66.dp) // Outer main pill height
             .padding(horizontal = 16.dp),
         color = Color.Transparent
     ) {
-        // Outer pill background
+        // Outer pill background (no internal padding)
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(50))
-                .background(NavBarBackground)
-              //  .padding(horizontal = 10.dp, vertical = 4.dp), 👈 small vertical space around tabs
+                .background(NavBarBackground),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -70,8 +69,7 @@ fun SpicaBottomNavBar(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onTabSelected(idx) }
-                        .height(58.dp) // 👈 inner pill/tab height — almost fills parent
-                        .padding(horizontal = 0.dp),
+                        .fillMaxHeight(), // 👈 Fills the full height of nav bar
                     contentAlignment = Alignment.Center
                 ) {
                     if (selected) {
@@ -81,7 +79,7 @@ fun SpicaBottomNavBar(
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(50))
                                 .background(UnselectedGray.copy(alpha = 0.45f))
-                                .padding(horizontal = 14.dp),
+                                .padding(horizontal = 14.dp), // only horizontal padding now
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
@@ -110,7 +108,7 @@ fun SpicaBottomNavBar(
                             )
                         }
                     } else {
-                        // --- Unselected circle ---
+                        // --- Unselected tab ---
                         Box(
                             modifier = Modifier
                                 .size(58.dp)
