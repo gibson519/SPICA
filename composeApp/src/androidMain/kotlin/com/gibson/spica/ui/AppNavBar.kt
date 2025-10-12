@@ -1,5 +1,7 @@
 package com.gibson.spica.ui
 
+import com.gibson.spica.ui.SpicaBottomNavBar
+import com.gibson.spica.ui.DefaultSpicaTabs
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Box
