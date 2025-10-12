@@ -27,17 +27,35 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Compile common Kotlin metadata (catches unresolved refs in commonMain)
-      - name: Compile Common Metadata
-        run: ./gradlew compileKotlinMetadata --stacktrace --info
+      # ✅ Compile commonMain sources first
+      - name: Compile Kotlin Metadata (Error Extractor)
+        id: compile_metadata
         shell: bash
+        run: |
+          echo "🔍 Compiling commonMain sources to detect Kotlin errors..."
+          ./gradlew compileKotlinMetadata --stacktrace --info | tee build_log.txt
 
-      # 🚀 Build only the Android debug APK
-      - name: Assemble Android Debug APK
-        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
+          echo ""
+          echo "----------------------------------------"
+          echo "🧾 CommonMain Kotlin Compilation Error Summary"
+          echo "----------------------------------------"
+          grep -E "^e: " build_log.txt || echo "✅ No Kotlin compilation errors found in commonMain."
+
+      # 🚀 Assemble Android Debug APK (Android module)
+      - name: Assemble Android Debug APK (Error Extractor)
+        id: assemble_debug
         shell: bash
+        run: |
+          echo "🚀 Building Android Debug APK..."
+          ./gradlew :composeApp:assembleDebug --stacktrace --info | tee android_build_log.txt
 
-      # 📦 Upload APK as artifact
+          echo ""
+          echo "----------------------------------------"
+          echo "🤖 Android Kotlin Compilation Error Summary"
+          echo "----------------------------------------"
+          grep -E "^e: " android_build_log.txt || echo "✅ No Kotlin compilation errors found in Android module."
+
+      # 📦 Upload APK as artifact (only if build succeeded)
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
