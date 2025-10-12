@@ -27,32 +27,37 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Step 1: Compile common sources and show errors clearly
-      - name: Compile Common Metadata (Error Highlighter)
+      # ✅ Step 1: Compile common sources and show only real Kotlin errors
+      - name: Compile Common Metadata (Filtered Kotlin Errors)
         run: |
-          echo "🔍 Compiling commonMain to detect Kotlin errors..."
+          echo "🔍 Compiling commonMain to detect Kotlin code errors..."
           ./gradlew compileKotlinMetadata --stacktrace --info --warning-mode all 2>&1 | tee compile_log.txt
 
-          # Show Kotlin errors with a few lines of context
-          $errors = Select-String -Path compile_log.txt -Pattern "e: " -Context 2,2
+          # Find only actual Kotlin compiler error lines ("e: ")
+          $errors = Select-String -Path compile_log.txt -Pattern "e: " | Where-Object {
+            ($_ -notmatch "Cannot use Kotlin build script compile avoidance") -and
+            ($_ -notmatch "Task ':") -and
+            ($_ -notmatch "Gradle build daemon") -and
+            ($_ -notmatch "Caching disabled") -and
+            ($_ -notmatch "Execution stopped") -and
+            ($_ -notmatch "Resolve mutations") -and
+            ($_ -notmatch "Daemon") -and
+            ($_ -notmatch "kmpPartiallyResolvedDependenciesChecker")
+          }
+
           if ($errors) {
             echo ""
-            echo "❌ Kotlin Compilation Errors Found:"
-            echo "----------------------------------"
-            $errors | ForEach-Object {
-              echo "----------------------------------"
-              $_.Context.PreContext
-              echo $_.Line
-              $_.Context.PostContext
-            }
-            echo "----------------------------------"
+            echo "❌ Real Kotlin Compilation Errors Found:"
+            echo "---------------------------------------"
+            $errors | ForEach-Object { echo $_ }
+            echo "---------------------------------------"
             exit 1
           } else {
-            echo "✅ No Kotlin compilation errors in commonMain."
+            echo "✅ No Kotlin source code errors detected in commonMain."
           }
         shell: pwsh
 
-      # ✅ Step 2: Assemble APK (only runs if step above passes)
+      # ✅ Step 2: Assemble APK (only runs if no compile errors)
       - name: Assemble Android Debug APK
         run: ./gradlew :composeApp:assembleDebug --stacktrace --info --warning-mode all
         shell: bash
