@@ -27,37 +27,23 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      # ✅ Step 1: Compile common sources and highlight real Kotlin errors only
-      - name: Compile Common Metadata (Error Highlighter)
+      # ✅ Step 1: Compile common sources and stop immediately on any error
+      - name: Compile Common Metadata (Error Detection)
         run: |
-          echo "🔍 Compiling commonMain to detect Kotlin source errors..."
+          echo "🔍 Compiling commonMain to detect Kotlin errors..."
           ./gradlew compileKotlinMetadata --stacktrace --info --warning-mode all 2>&1 | tee compile_log.txt
-
-          # Only capture real Kotlin compiler errors (lines that include '.kt')
-          $errors = Select-String -Path compile_log.txt -Pattern "e: .*\.kt" -Context 2,2
-          if ($errors) {
-            echo ""
-            echo "❌ Kotlin Source Compilation Errors Found:"
-            echo "----------------------------------"
-            $errors | ForEach-Object {
-              echo "----------------------------------"
-              $_.Context.PreContext
-              echo $_.Line
-              $_.Context.PostContext
-            }
-            echo "----------------------------------"
+          if (Select-String -Path compile_log.txt -Pattern "e: " -SimpleMatch) {
+            echo "❌ Kotlin compilation errors detected in commonMain!"
             exit 1
-          } else {
-            echo "✅ No Kotlin source errors in commonMain."
           }
         shell: pwsh
 
-      # ✅ Step 2: Assemble APK (only runs if above passes)
+      # ✅ Step 2: Assemble APK (only runs if step above passes)
       - name: Assemble Android Debug APK
         run: ./gradlew :composeApp:assembleDebug --stacktrace --info --warning-mode all
         shell: bash
 
-      # 📦 Step 3: Upload generated APK
+      # 📦 Step 3: Upload generated APK (optional)
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
