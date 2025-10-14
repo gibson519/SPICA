@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
 
        // ✅ Hide navigation bar (immersive mode)
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-      /*      controller.hide(android.view.WindowInsets.Type.navigationBars())*/
+             controller.hide(android.view.WindowInsets.Type.navigationBars())
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
