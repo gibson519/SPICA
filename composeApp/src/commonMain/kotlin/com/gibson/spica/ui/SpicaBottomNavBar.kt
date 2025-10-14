@@ -66,7 +66,7 @@ fun SpicaBottomNavBar(
         ) {
             Row(
                 modifier = Modifier
-                    .widthIn(max = 390.dp) // ✅ fill screen width but stop at 390dp on tablets
+                    .widthIn(max = 420.dp) // ✅ fill screen width but stop at 390dp on tablets
                     .height(NavBarHeight)
                     .clip(RoundedCornerShape(NavBarCorner))
                     .background(NavBarBackground),
