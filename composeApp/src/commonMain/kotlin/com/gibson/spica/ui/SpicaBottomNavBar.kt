@@ -58,16 +58,17 @@ fun SpicaBottomNavBar(
             .padding(horizontal = NavBarHorizontalPadding),
         color = Color.Transparent
     ) {
-        // ✅ Safe wrapper to prevent crash on older/low-end devices
+        // ✅ Constrain width but allow fill on smaller screens
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(unbounded = true), // more forgiving
+                .wrapContentHeight(unbounded = true),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier
-                    .widthIn(min = 0.dp, max = 390.dp) // ✅ safer width constraint
+                    .fillMaxWidth()
+                    .widthIn(max = 390.dp) // ✅ fill screen width but stop at 390dp on tablets
                     .height(NavBarHeight)
                     .clip(RoundedCornerShape(NavBarCorner))
                     .background(NavBarBackground),
@@ -147,7 +148,7 @@ fun SpicaBottomNavBar(
     }
 }
 
-/* --- Preview for testing ---
+// --- Preview for testing ---
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun SpicaBottomNavBarPreview() {
@@ -166,4 +167,4 @@ private fun SpicaBottomNavBarPreview() {
             onTabSelected = { selectedIndex = it }
         )
     }
-}*/
+}
