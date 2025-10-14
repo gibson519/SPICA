@@ -61,13 +61,11 @@ fun SpicaBottomNavBar(
         // ✅ Constrain width but allow fill on smaller screens
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(unbounded = true),
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .widthIn(max = 390.dp) // ✅ fill screen width but stop at 390dp on tablets
                     .height(NavBarHeight)
                     .clip(RoundedCornerShape(NavBarCorner))
