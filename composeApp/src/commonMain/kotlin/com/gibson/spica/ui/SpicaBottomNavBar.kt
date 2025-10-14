@@ -32,7 +32,6 @@ private val TextColor = Color.White
 
 // --- Sizing Constants ---
 private val NavBarHeight = 80.dp
-private val NavBarWidth = 390.dp
 private val NavBarCorner = 40.dp
 private val NavBarHorizontalPadding = 5.dp
 private val UnselectedTabSize = 68.dp
@@ -59,16 +58,16 @@ fun SpicaBottomNavBar(
             .padding(horizontal = NavBarHorizontalPadding),
         color = Color.Transparent
     ) {
-        // ✅ Centered box that constrains width to 390.dp max (for tablet/foldable screens)
+        // ✅ Safe wrapper to prevent crash on older/low-end devices
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight(unbounded = true), // more forgiving
             contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier
-                    .width(NavBarWidth)
+                    .widthIn(min = 0.dp, max = 390.dp) // ✅ safer width constraint
                     .height(NavBarHeight)
                     .clip(RoundedCornerShape(NavBarCorner))
                     .background(NavBarBackground),
@@ -148,7 +147,7 @@ fun SpicaBottomNavBar(
     }
 }
 
-// --- Preview for testing ---
+/* --- Preview for testing ---
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun SpicaBottomNavBarPreview() {
@@ -167,4 +166,4 @@ private fun SpicaBottomNavBarPreview() {
             onTabSelected = { selectedIndex = it }
         )
     }
-}
+}*/
