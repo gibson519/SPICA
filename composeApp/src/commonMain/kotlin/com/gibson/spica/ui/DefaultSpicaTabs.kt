@@ -2,13 +2,22 @@ package com.gibson.spica.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Work
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Wallet
 
+// ✅ For bottom navigation
 val DefaultSpicaTabs = listOf(
     SpicaTab("Home", Icons.Default.Home),
-    SpicaTab("Portfolio", Icons.Default.Work),
-    SpicaTab("Watchlist", Icons.Default.List),
+    SpicaTab("Portfolio", Icons.Default.Wallet),
+    SpicaTab("Watchlist", Icons.Default.PieChart),
     SpicaTab("Markets", Icons.Default.Public)
+)
+
+// ✅ For side navigation (shares same data)
+val DefaultSpicaSideTabs = listOf(
+    SpicaSideTab("Home", Icons.Default.Home),
+    SpicaSideTab("Portfolio", Icons.Default.Wallet),
+    SpicaSideTab("Watchlist", Icons.Default.PieChart),
+    SpicaSideTab("Markets", Icons.Default.Public)
 )
