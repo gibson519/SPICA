@@ -18,12 +18,12 @@ class MainActivity : ComponentActivity() {
         // ✅ Allow drawing behind system bars
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        /* ✅ Hide navigation bar (immersive mode)
+       // ✅ Hide navigation bar (immersive mode)
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-            controller.hide(android.view.WindowInsets.Type.navigationBars())
+      /*      controller.hide(android.view.WindowInsets.Type.navigationBars())*/
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }*/
+        }
 
         setContent {
             App()
