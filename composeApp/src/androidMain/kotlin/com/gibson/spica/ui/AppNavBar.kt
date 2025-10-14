@@ -27,7 +27,7 @@ actual fun AppNavBar(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 16.dp),
-                tabs = DefaultSpicaTabs,
+                tabs = DefaultSpicaSideTabs,
                 selectedIndex = selectedIndex,
                 onTabSelected = onTabSelected
             )
