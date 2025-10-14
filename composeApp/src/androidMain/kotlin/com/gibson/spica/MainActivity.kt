@@ -15,10 +15,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        /* ✅ Allow drawing behind system bars
+        // ✅ Allow drawing behind system bars
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // ✅ Hide navigation bar (immersive mode)
+        /* ✅ Hide navigation bar (immersive mode)
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
             controller.hide(android.view.WindowInsets.Type.navigationBars())
             controller.systemBarsBehavior =
