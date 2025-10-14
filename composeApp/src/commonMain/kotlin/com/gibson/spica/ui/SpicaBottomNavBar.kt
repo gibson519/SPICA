@@ -32,6 +32,7 @@ private val TextColor = Color.White
 
 // --- Sizing Constants ---
 private val NavBarHeight = 80.dp
+private val NavBarWidth = 390.dp
 private val NavBarCorner = 40.dp
 private val NavBarHorizontalPadding = 5.dp
 private val UnselectedTabSize = 68.dp
@@ -67,8 +68,7 @@ fun SpicaBottomNavBar(
         ) {
             Row(
                 modifier = Modifier
-                    .widthIn(max = 390.dp) // ✅ Maximum width
-                    .fillMaxWidth()
+                    .width(NavBarWidth)
                     .height(NavBarHeight)
                     .clip(RoundedCornerShape(NavBarCorner))
                     .background(NavBarBackground),
