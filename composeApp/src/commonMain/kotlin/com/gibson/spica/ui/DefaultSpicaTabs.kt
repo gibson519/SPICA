@@ -15,7 +15,7 @@ val DefaultSpicaTabs = listOf(
 )
 
 // ✅ For side navigation (shares same data)
-val SpicaSideTabs = listOf(
+val DefaultSpicaSideTabs = listOf(
     SpicaSideTab("Home", Icons.Default.Home),
     SpicaSideTab("Portfolio", Icons.Default.Wallet),
     SpicaSideTab("Watchlist", Icons.Default.PieChart),
