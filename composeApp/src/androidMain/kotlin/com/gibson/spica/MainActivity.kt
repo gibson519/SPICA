@@ -12,10 +12,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Enables layout to extend into system bars
-        enableEdgeToEdge()
+   /*     enableEdgeToEdge()*/
         super.onCreate(savedInstanceState)
 
-        // ✅ Allow drawing behind system bars
+        /* ✅ Allow drawing behind system bars
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
        // ✅ Hide navigation bar (immersive mode)
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
              controller.hide(android.view.WindowInsets.Type.navigationBars())
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+        }*/
 
         setContent {
             App()
