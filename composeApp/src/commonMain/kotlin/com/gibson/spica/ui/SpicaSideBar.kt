@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 // ✅ Data class for side nav tab
 data class SpicaSideTab(val label: String, val icon: ImageVector)
@@ -29,7 +28,7 @@ private val UnselectedIconTint = Color.White.copy(alpha = 0.7f)
 private val SelectedIconTint = Color.Black
 
 private val SideNavWidth = 35.dp
-private val SideNavCorner = RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp)
+private val SideNavCorner = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp) // ✅ reduced rounding
 private val SelectedCircleSize = 35.dp
 private val IconSize = 24.dp
 private val TopPadding = 5.dp
@@ -45,15 +44,16 @@ fun SpicaSideNav(
 ) {
     Column(
         modifier = modifier
-            .width(SideNavWidth)
             .fillMaxHeight()
+            .width(SideNavWidth)
             .clip(SideNavCorner)
             .background(SideNavBackground)
-            .padding(top = TopPadding, bottom = BottomPadding),
+            .padding(top = TopPadding, bottom = BottomPadding)
+            .offset(x = 0.dp), // ✅ ensure flush left edge
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- Top icons ---
+        // --- Top section: icons ---
         Column(
             verticalArrangement = Arrangement.spacedBy(IconSpacing),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -81,7 +81,7 @@ fun SpicaSideNav(
             }
         }
 
-        // --- Bottom Settings icon ---
+        // --- Bottom: Settings icon ---
         Box(
             modifier = Modifier
                 .size(SelectedCircleSize)
