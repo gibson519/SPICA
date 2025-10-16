@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.gibson.spica.ui.AppNavBar
-import com.gibson.spica.ui.HomeScreen
-import com.gibson.spica.ui.PortfolioScreen
-import com.gibson.spica.ui.WatchlistScreen
-import com.gibson.spica.ui.MarketsScreen
+import com.gibson.spica.ui.screens.*
 
 @Composable
 fun AppNavigation() {
