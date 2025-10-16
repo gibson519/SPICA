@@ -37,7 +37,7 @@ private val TextColor = Color.White
 
 // --- Sizing ---
 private val NavBarHeight = 72.dp
-private val NavBarCorner = 32.dp
+private val NavBarCorner = 36.dp
 private val NavBarHorizontalPadding = 5.dp
 private val UnselectedTabSize = 60.dp
 private val UnselectedIconSize = 24.dp
