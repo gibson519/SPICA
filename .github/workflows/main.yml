@@ -1,6 +1,7 @@
-name: SPICA Build & Test
+name: SPICA Build & Test (With Cache)
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +18,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # ✅ Updated Gradle setup (replaces deprecated gradle-build-action)
+      # 🧱 Cache Gradle wrapper, config, and build caches
+      - name: Cache Gradle & Build Files
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            **/.gradle/build-cache
+            composeApp/build
+            shared/build
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -27,19 +41,22 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
+      # ⚙️ Build all KMP targets (with configuration cache + build cache)
       - name: Build all KMP targets
-        run:  ./gradlew build --stacktrace --info
+        run: ./gradlew build --configuration-cache --build-cache --stacktrace --info
         shell: bash
 
+      # 🚀 Assemble Android Debug APK
       - name: Assemble Android Debug APK
-        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
+        run: ./gradlew :composeApp:assembleDebug --configuration-cache --build-cache --stacktrace --info
         shell: bash
 
+      # 🧪 Run all tests
       - name: Run Tests
-        run: ./gradlew test --stacktrace --info
+        run: ./gradlew test --configuration-cache --build-cache --stacktrace --info
         shell: bash
 
-      # ✅ Optional: upload the generated APK as an artifact
+      # 📦 Upload Debug APK (optional)
       - name: Upload Debug APK
         if: success()
         uses: actions/upload-artifact@v4
