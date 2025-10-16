@@ -63,9 +63,7 @@ fun SpicaBottomNavBar(
 
     LaunchedEffect(Unit) {
         val activity = context as? Activity ?: return@LaunchedEffect
-        // Edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(activity.window, false)
-        // Enable immersive mode
         val controller = WindowInsetsControllerCompat(activity.window, view)
         controller.hide(android.view.WindowInsets.Type.navigationBars())
         controller.systemBarsBehavior =
@@ -75,7 +73,8 @@ fun SpicaBottomNavBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .widthIn(MaxNavBarWidth)
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .width(MaxNavBarWidth)
             .height(NavBarHeight)
             .padding(horizontal = NavBarHorizontalPadding),
         color = Color.Transparent
