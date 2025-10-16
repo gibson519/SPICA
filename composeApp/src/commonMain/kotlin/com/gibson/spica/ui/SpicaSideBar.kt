@@ -43,13 +43,13 @@ fun SpicaSideNav(
     onTabSelected: (Int) -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier               // ignore parent padding
+            .absoluteOffset(x = 0.dp, y = 0.dp)
             .fillMaxHeight()
             .width(SideNavWidth)
             .clip(SideNavCorner)
             .background(SideNavBackground)
-            .padding(top = TopPadding, bottom = BottomPadding)
-            .offset(x = 0.dp), // ✅ ensure flush left edge
+            .padding(top = TopPadding, bottom = BottomPadding),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
