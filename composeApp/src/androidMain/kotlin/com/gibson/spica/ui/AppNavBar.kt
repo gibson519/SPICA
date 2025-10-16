@@ -1,38 +1,44 @@
 package com.gibson.spica.ui
 
+import android.app.Activity
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.windowsizeclass.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 
 /**
- * Android/iOS actual implementation:
- * - Uses SpicaBottomNavBar for small screens (phones)
- * - Uses SpicaSideNav for tablets
+ * Android actual implementation of AppNavBar.
+ * - Uses bottom nav for Compact width (phones)
+ * - Uses side nav for Medium/Expanded width (tablets and large screens)
  */
 @Composable
 actual fun AppNavBar(
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
-    val isTablet = screenWidth > 600 // tablet breakpoint
+    val context = LocalContext.current
+    val activity = context as? Activity ?: return
+
+    // ✅ Automatically determine the window size class
+    val windowSizeClass = calculateWindowSizeClass(activity)
+    val widthClass = windowSizeClass.widthSizeClass
+    val isTabletOrLarger = widthClass != WindowWidthSizeClass.Compact
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (isTablet) {
-            // ✅ Side nav for large Android devices
+        if (isTabletOrLarger) {
+            // ✅ Side navigation for tablets / large screens
             SpicaSideNav(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 16.dp),
+                    .padding(start = 12.dp),
                 tabs = DefaultSpicaSideTabs,
                 selectedIndex = selectedIndex,
                 onTabSelected = onTabSelected
             )
         } else {
-            // ✅ Bottom nav for phones
+            // ✅ Bottom navigation for phones
             SpicaBottomNavBar(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
