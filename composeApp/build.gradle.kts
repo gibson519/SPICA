@@ -44,7 +44,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
