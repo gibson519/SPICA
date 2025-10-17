@@ -1,7 +1,6 @@
 package com.gibson.spica.navigation
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -10,24 +9,38 @@ import com.gibson.spica.ui.screens.*
 
 @Composable
 fun AppNavigation() {
-    var selectedState by remember { mutableStateOf(0) }
+    val current = Router.currentRoute
+    val mainScreens = listOf(
+        Screen.Home.route,
+        Screen.Portfolio.route,
+        Screen.Watchlist.route,
+        Screen.Markets.route
+    )
+
+    val selectedState = remember(current) {
+        mainScreens.indexOf(current).takeIf { it >= 0 } ?: 0
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Content area
-        Column(modifier = Modifier.fillMaxSize()) {
-            when (selectedState) {
-                0 -> HomeScreen()
-                1 -> PortfolioScreen()
-                2 -> WatchlistScreen()
-                3 -> MarketsScreen()
-                else -> HomeScreen()
-            }
+        when (current) {
+            Screen.Signup.route -> SignupScreen()
+            Screen.Login.route -> LoginScreen()
+            Screen.AccountSetup.route -> AccountSetupScreen()
+            Screen.EmailVerify.route -> EmailVerifyScreen()
+            Screen.PhoneVerify.route -> PhoneVerifyScreen()
+            Screen.Home.route -> HomeScreen()
+            Screen.Portfolio.route -> PortfolioScreen()
+            Screen.Watchlist.route -> WatchlistScreen()
+            Screen.Markets.route -> MarketsScreen()
+            else -> HomeScreen()
         }
 
-        // Platform-specific nav bar (expect/actual)
-        AppNavBar(
-            selectedIndex = selectedState,
-            onTabSelected = { selectedState = it }
-        )
+        // Show nav bar only for main screens
+        if (current in mainScreens) {
+            AppNavBar(
+                selectedIndex = selectedState,
+                onTabSelected = { index -> Router.navigate(mainScreens[index]) }
+            )
+        }
     }
 }
