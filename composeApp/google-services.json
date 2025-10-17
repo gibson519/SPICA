@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "833897904391",
+    "firebase_url": "https://fabicx-default-rtdb.firebaseio.com",
+    "project_id": "fabicx",
+    "storage_bucket": "fabicx.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833897904391:android:f00923802190665b70eda2",
+        "android_client_info": {
+          "package_name": "com.gibson.spica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833897904391-vqt69eii51s2sr20jc4l1nso1ao51kb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGGgTkHsAqTc6mgn0XI8keuiYubGQX_YM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833897904391-vqt69eii51s2sr20jc4l1nso1ao51kb8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "833897904391-fpugn11asd2nin7k2kk6pcu57r27q520.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gibsin.fobicx"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
