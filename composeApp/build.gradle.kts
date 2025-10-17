@@ -95,7 +95,20 @@ android {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+implementation(platform(libs.firebase.bom))
+implementation(libs.firebase.analytics)
+implementation(libs.firebase.auth)
+implementation(libs.androidx.credentials)
+implementation(libs.androidx.credentials.play.services.auth)
+implementation(libs.googleid)
+implementation(libs.firebase.database)
+implementation(libs.firebase.firestore)
+implementation(libs.firebase.storage)
+implementation(libs.firebase.functions)
+implementation(libs.firebase.messaging)
+implementation(libs.firebase.inappmessaging.display)
+implementation(libs.play.services.ads)
+debugImplementation(compose.uiTooling)
 }
 
 compose.desktop {
