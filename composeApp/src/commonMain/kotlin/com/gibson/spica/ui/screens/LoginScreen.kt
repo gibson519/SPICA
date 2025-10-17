@@ -5,8 +5,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.gibson.spica.firebase.FirebaseHelper
+import com.gibson.spica.data.AuthRepository
 import com.gibson.spica.navigation.Router
 import com.gibson.spica.navigation.Screen
 import kotlinx.coroutines.launch
@@ -20,53 +21,47 @@ fun LoginScreen() {
     var message by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(24.dp)) {
-            Text("Login", style = MaterialTheme.typography.titleLarge)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Login to SPICA", style = MaterialTheme.typography.titleLarge)
+            Spacer(Modifier.height(20.dp))
 
-            Spacer(Modifier.height(24.dp))
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(Modifier.height(12.dp))
+            OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
+            Spacer(Modifier.height(10.dp))
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Password") },
-                modifier = Modifier.fillMaxWidth()
+                visualTransformation = PasswordVisualTransformation()
             )
-
             Spacer(Modifier.height(20.dp))
-            Button(
-                onClick = {
-                    scope.launch {
-                        loading = true
-                        val result = FirebaseHelper.login(email, password)
-                        loading = false
-                        result.onSuccess {
+
+            Button(onClick = {
+                loading = true
+                scope.launch {
+                    val result = AuthRepository.login(email, password)
+                    loading = false
+                    result.onSuccess { user ->
+                        if (user?.isEmailVerified == true) {
                             Router.navigate(Screen.Home.route)
-                        }.onFailure {
-                            message = it.message
+                        } else {
+                            Router.navigate(Screen.EmailVerify.route)
                         }
+                    }.onFailure {
+                        message = it.message
                     }
-                },
-                enabled = !loading && email.isNotEmpty() && password.isNotEmpty(),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(if (loading) "Logging in..." else "Login")
+                }
+            }, enabled = !loading) {
+                Text(if (loading) "Signing in..." else "Login")
+            }
+
+            Spacer(Modifier.height(12.dp))
+            TextButton(onClick = { Router.navigate(Screen.Signup.route) }) {
+                Text("Don't have an account? Sign up")
             }
 
             message?.let {
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(10.dp))
                 Text(it, color = MaterialTheme.colorScheme.error)
-            }
-
-            Spacer(Modifier.height(20.dp))
-            TextButton(onClick = { Router.navigate(Screen.Signup.route) }) {
-                Text("Don’t have an account? Sign up")
             }
         }
     }
