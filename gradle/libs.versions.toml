@@ -16,6 +16,19 @@ kotlin = "2.2.20"
 kotlinx-coroutines = "1.10.2"
 ktor = "3.3.0"
 logback = "1.5.18"
+firebasebom = "33.16.0"  
+firebaseAnalytics = "22.5.0"  
+firebaseAuth = "23.2.1"  
+credentials = "1.5.0"  
+credentialsPlayServicesAuth = "1.5.0"  
+googleid = "1.1.1"  
+firebaseDatabase = "21.0.0"  
+firebaseFirestore = "25.1.4"  
+firebaseStorage = "21.0.2"  
+firebaseFunctions = "21.2.1"  
+firebaseMessaging = "24.1.2"  
+firebaseInappmessagingDisplay = "21.0.2"  
+playServicesAds = "24.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -33,6 +46,19 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-serverCore = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-serverNetty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebasebom"} 
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" } 
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" } 
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" } 
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" } 
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" } 
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" } 
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" } 
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" } 
+firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebaseFunctions" } 
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" } 
+firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebaseInappmessagingDisplay" } 
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }  
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
