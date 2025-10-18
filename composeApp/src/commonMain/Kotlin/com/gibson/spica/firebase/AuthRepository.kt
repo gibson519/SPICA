@@ -1,6 +1,5 @@
 package com.gibson.spica.firebase
 
-import com.gibson.spica.firebase.AuthResult
 
 /**
  * Cross-platform Firebase authentication interface.
