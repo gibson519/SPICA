@@ -1,7 +1,6 @@
 package com.gibson.spica.auth
 
 import com.gibson.spica.firebase.FirebaseAuthService
-import com.gibson.spica.auth.AuthResult
 
 class AuthRepository(
     private val firebaseAuth: FirebaseAuthService = FirebaseAuthService()
