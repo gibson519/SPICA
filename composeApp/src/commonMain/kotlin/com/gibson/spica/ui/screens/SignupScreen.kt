@@ -1,5 +1,6 @@
 package com.gibson.spica.ui.screens
 
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
