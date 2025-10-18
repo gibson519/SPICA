@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.*
 import androidx.navigation.compose.*
 import com.gibson.spica.ui.NavBar
 import com.gibson.spica.ui.SpicaTab
