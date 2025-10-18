@@ -10,6 +10,7 @@ import com.gibson.spica.ui.screens.*
 @Composable
 fun AppNavigation() {
     val current = Router.currentRoute
+
     val mainScreens = listOf(
         Screen.Home.route,
         Screen.Portfolio.route,
@@ -17,6 +18,7 @@ fun AppNavigation() {
         Screen.Markets.route
     )
 
+    // Determine selected tab index based on current route
     val selectedState = remember(current) {
         mainScreens.indexOf(current).takeIf { it >= 0 } ?: 0
     }
@@ -35,11 +37,14 @@ fun AppNavigation() {
             else -> HomeScreen()
         }
 
-        // Show nav bar only for main screens
+        // ✅ Show nav bar only for main pages
         if (current in mainScreens) {
             AppNavBar(
                 selectedIndex = selectedState,
-                onTabSelected = { index -> Router.navigate(mainScreens[index]) }
+                onTabSelected = { index ->
+                    val newRoute = mainScreens[index]
+                    if (newRoute != current) Router.navigate(newRoute)
+                }
             )
         }
     }
