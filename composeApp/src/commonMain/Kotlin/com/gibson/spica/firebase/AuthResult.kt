@@ -1,4 +1,4 @@
-package com.gibson.spica.auth
+package com.gibson.spica.firebase
 
 data class AuthResult(
     val userId: String?,
