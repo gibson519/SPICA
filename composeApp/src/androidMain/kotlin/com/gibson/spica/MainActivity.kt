@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }*/
+        FirebaseApp.initializeApp(this)
 
         setContent {
             App()
