@@ -1,27 +1,25 @@
 package com.gibson.spica.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
-/**
- * Desktop/Web actual implementation:
- * Always shows side nav (right side for desktop, left for web if you want).
- */
 @Composable
-actual fun AppNavBar(
+actual fun NavBar(
+    modifier: Modifier,
+    tabs: List<SpicaTab>,
     selectedIndex: Int,
     onTabSelected: (Int) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        SpicaSideNav(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 16.dp),
-            tabs = DefaultSpicaTabs,
-            selectedIndex = selectedIndex,
-            onTabSelected = onTabSelected
-        )
+    NavigationBar(modifier = modifier) {
+        tabs.forEachIndexed { index, tab ->
+            NavigationBarItem(
+                icon = { Icon(tab.icon, tab.label) },
+                label = { Text(tab.label) },
+                selected = index == selectedIndex,
+                onClick = { onTabSelected(index) }
+            )
+        }
     }
 }
