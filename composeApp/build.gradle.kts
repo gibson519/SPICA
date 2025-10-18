@@ -45,6 +45,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation("androidx.navigation:navigation-compose:2.8.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
