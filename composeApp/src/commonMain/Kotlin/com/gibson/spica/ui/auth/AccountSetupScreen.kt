@@ -6,46 +6,74 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.gibson.spica.auth.AuthRepository
+import com.gibson.spica.auth.AuthViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun AccountSetupScreen(
-    repository: AuthRepository = AuthRepository(),
-    onComplete: () -> Unit
+    viewModel: AuthViewModel,
+    onContinue: () -> Unit
 ) {
-    var verified by remember { mutableStateOf(repository.isEmailVerified()) }
+    val coroutineScope = rememberCoroutineScope()
+    var message by remember { mutableStateOf<String?>(null) }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
-            modifier = Modifier
-                .padding(24.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!verified) {
-                Text(
-                    "Please verify your email before continuing.",
-                    style = MaterialTheme.typography.titleMedium
-                )
+            Text(
+                "Verify Your Email",
+                style = MaterialTheme.typography.headlineSmall
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                "A verification link has been sent to your email address. Please verify your email before continuing.",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        viewModel.sendEmailVerification()
+                        message = "Verification email sent!"
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Resend Verification Email")
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        val result = viewModel.reloadUser()
+                        if (result.isVerified) {
+                            onContinue()
+                        } else {
+                            message = "Email not verified yet. Please check your inbox."
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Continue")
+            }
+
+            message?.let {
                 Spacer(Modifier.height(16.dp))
-                Button(onClick = { repository.sendEmailVerification() }) {
-                    Text("Resend Verification Email")
-                }
-                Spacer(Modifier.height(16.dp))
-                Button(onClick = {
-                    repository.reloadUser()
-                    verified = repository.isEmailVerified()
-                    if (verified) onComplete()
-                }) {
-                    Text("I’ve Verified My Email")
-                }
-            } else {
-                Text("Email verified ✅", style = MaterialTheme.typography.titleLarge)
-                Spacer(Modifier.height(24.dp))
-                Button(onClick = onComplete) {
-                    Text("Continue to Home")
-                }
+                Text(it, color = MaterialTheme.colorScheme.secondary)
             }
         }
     }
