@@ -1,39 +1,31 @@
 package com.gibson.spica.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import com.gibson.spica.ui.AppNavBar
-import com.gibson.spica.ui.screens.*
+sealed class Screen(val route: String) {
+    // Onboarding
+    object Signup : Screen("signup")
+    object Login : Screen("login")
+    object AccountSetup : Screen("account_setup")
+    object EmailVerify : Screen("email_verify")
+    object PhoneVerify : Screen("phone_verify")
 
-@Composable
-fun AppNavigation() {
-    var selectedState by remember { mutableStateOf(0) }
+    // Main
+    object Home : Screen("home")
+    object Portfolio : Screen("portfolio")
+    object Watchlist : Screen("watchlist")
+    object Markets : Screen("markets")
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // --- Screen content ---
-        Column(modifier = Modifier.fillMaxSize()) {
-            when (selectedState) {
-                0 -> HomeScreen()
-                1 -> PortfolioScreen()
-                2 -> WatchlistScreen()
-                3 -> MarketsScreen()
-                else -> when (Router.currentRoute) {
-                    Screen.Signup.route -> SignupScreen()
-                    Screen.Login.route -> LoginScreen()
-                    Screen.EmailVerify.route -> EmailVerifyScreen()
-                    Screen.AccountSetup.route -> AccountSetupScreen()
-                    else -> HomeScreen()
-                }
-            }
+    companion object {
+        fun fromRoute(route: String?): Screen? = when (route) {
+            Signup.route -> Signup
+            Login.route -> Login
+            AccountSetup.route -> AccountSetup
+            EmailVerify.route -> EmailVerify
+            PhoneVerify.route -> PhoneVerify
+            Home.route -> Home
+            Portfolio.route -> Portfolio
+            Watchlist.route -> Watchlist
+            Markets.route -> Markets
+            else -> null
         }
-
-        // --- Platform-specific navigation bar ---
-        AppNavBar(
-            selectedIndex = selectedState,
-            onTabSelected = { selectedState = it }
-        )
     }
 }
