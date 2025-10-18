@@ -1,11 +1,10 @@
 package com.gibson.spica.ui.screens
 
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.gibson.spica.data.AuthRepository
 import com.gibson.spica.navigation.Router
@@ -18,59 +17,69 @@ fun SignupScreen() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf<String?>(null) }
+    var error by remember { mutableStateOf<String?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("SPICA — Sign Up", style = MaterialTheme.typography.titleLarge)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("Create Account", style = MaterialTheme.typography.headlineMedium)
 
-            Spacer(Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") }
-            )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation()
+        )
 
-            Spacer(Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                visualTransformation = PasswordVisualTransformation()
-            )
-
-            Spacer(Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-                    loading = true
-                    scope.launch {
-                        val result = AuthRepository.signUp(email, password)
-                        loading = false
-                        result.onSuccess {
-                            message = "Account created! Verify your email."
-                            Router.navigate(Screen.EmailVerify.route)
-                        }.onFailure {
-                            message = it.message
+        Button(
+            onClick = {
+                loading = true
+                error = null
+                scope.launch {
+                    val result = AuthRepository.signUp(email, password)
+                    loading = false
+                    result.fold(
+                        onSuccess = { user ->
+                            if (user != null) {
+                                // ✅ After signup success — navigate to Home
+                                Router.navigate(Screen.Home.route)
+                            }
+                        },
+                        onFailure = { e ->
+                            error = e.message
                         }
-                    }
-                },
-                enabled = !loading
-            ) {
-                Text(if (loading) "Creating..." else "Sign Up")
-            }
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading
+        ) {
+            Text(if (loading) "Creating..." else "Sign Up")
+        }
 
-            Spacer(Modifier.height(12.dp))
-            TextButton(onClick = { Router.navigate(Screen.Login.route) }) {
-                Text("Already have an account? Log in")
-            }
+        error?.let {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(it, color = MaterialTheme.colorScheme.error)
+        }
 
-            message?.let {
-                Spacer(Modifier.height(10.dp))
-                Text(it, color = MaterialTheme.colorScheme.error)
-            }
+        Spacer(modifier = Modifier.height(12.dp))
+        TextButton(onClick = { Router.navigate(Screen.Login.route) }) {
+            Text("Already have an account? Login")
         }
     }
 }
